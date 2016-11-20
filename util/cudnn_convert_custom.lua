@@ -1,3 +1,6 @@
+-- modified from https://github.com/NVIDIA/torch-cudnn/blob/master/convert.lua
+-- removed error on nngraph
+
 -- modules that can be converted to nn seamlessly
 local layer_list = {
   'BatchNormalization',
