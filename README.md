@@ -1,5 +1,5 @@
 # pix2pix
-Generating pixels from pixels. Learns a mapping from input images to target output images, for example:
+Code for the paper <a href="">Image-to-Image Translation Using Conditional Adversarial Networks</a>. Learns a mapping from input images to target output images, for example:
 
 
 ## Setup
@@ -17,7 +17,7 @@ Generating pixels from pixels. Learns a mapping from input images to target outp
 ```
 
 ### Setup training and test data
-We require training data in the form of pairs of images (A,B). For example, these might be pairs (label map, photo) or (bw image, color image). Then we can learn to translate A to B or B to A:
+We require training data in the form of pairs of images {A,B}. For example, these might be pairs {label map, photo} or {bw image, color image}. Then we can learn to translate A to B or B to A:
 
 Create folder '/path/to/data' with subfolders 'A' and 'B'. 'A' and 'B' should each have their own subfolders 'train', 'val', 'test', etc. In '/path/to/data/A/train', put training images in style 'A'. In '/path/to/data/B/train', put the corresponding images in style 'B'. Repeat same for other data splits, e.g., 'val', 'test', etc.
 
@@ -37,7 +37,7 @@ This will combine each pair of images (A,B) into a single image file, ready for 
 
 Switch 'AtoB' to 'BtoA' to train translation in opposite direction.
 
-Models are cached to './checkpoints/expt_name' (can be changed by modifying 'opt.checkpoint_dir' in train.lua).
+Models are saved to './checkpoints/expt_name' (can be changed by modifying 'opt.checkpoint_dir' in train.lua).
 
 ## Test
 ```bash
@@ -60,6 +60,16 @@ By default, the server listens on localhost. Pass `0.0.0.0` to allow external co
     th -ldisplay.start 8000 0.0.0.0
 ```
 Then open `http://(hostname):(port)/` in your browser to load the remote desktop.
+
+## Citation
+If you use this code for your research, please cite our paper <a href="">Image-to-Image Translation Using Conditional Adversarial Networks</a>:
+
+@article{pix2pix2016,
+  title={Image-to-Image Translation with Conditional Adversarial Networks},
+  author={Isola, Phillip and Zhu, Jun-Yan and Zhou, Tinghui and Efros, Alexei A},
+  journal={arxiv},
+  year={2016}
+}
 
 ## Acknowledgments
 Code borrows heavily from https://github.com/soumith/dcgan.torch
