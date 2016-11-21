@@ -3,7 +3,7 @@ Code for the paper <a href="">Image-to-Image Translation Using Conditional Adver
 
 <img src="imgs/examples.png" width="900px"/>
 
-On certain tasks, decent results can be obtained fairly quickly and on small datasets. For example, to generate the facade example above, we trained on just 400 images for about 2 hours (on a single Pascal Titan X GPU).
+On some tasks, decent results can be obtained fairly quickly and on small datasets. For example, to learn to generate facades (example shown above), we trained on just 400 images for about 2 hours (on a single Pascal Titan X GPU).
 
 ## Setup
 
