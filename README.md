@@ -72,10 +72,13 @@ Then open `http://(hostname):(port)/` in your browser to load the remote desktop
 
 Let's try an example of training and testing on facade generation, using data from the <a href="http://cmp.felk.cvut.cz/~tylecr1/facade/">CMP Facades dataset</a>.
 
-First, grab a copy of the data, formatted for training:
+First, grab a copy of the data, already formatted for training:
 
 ```bash
-	wget -r --no-parent https://people.eecs.berkeley.edu/~isola/pix2pix/facades/ -O /path/to/data/facades
+    cd /path/to/data
+	wget https://people.eecs.berkeley.edu/~isola/pix2pix/facades.tar
+    tar -xvf facades.tar
+    rm facades.tar
 ```
 
 Next train:
@@ -83,7 +86,7 @@ Next train:
 	DATA_ROOT=/path/to/data/facades name=facades_generation which_direction=AtoB th train.lua
 ```
 
-Start the display server to results as the model trains:
+Start the display server to view results as the model trains:
 ```bash
 	th -ldisplay.start 8000 0.0.0.0
 ```
@@ -93,7 +96,7 @@ Finally, test:
 	DATA_ROOT=/path/to/data/facades name=facades_generation which_direction=AtoB phase=val th test.lua
 ```
 
-And view results by opening: `/path/to/data/facades/results/facades_generation/latest_net_G_val/index.html`.
+The test results will be saved to an html file here: `/path/to/data/facades/results/facades_generation/latest_net_G_val/index.html`.
 
 
 ## Citation
