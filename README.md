@@ -64,12 +64,14 @@ Then open `http://(hostname):(port)/` in your browser to load the remote desktop
 ## Citation
 If you use this code for your research, please cite our paper <a href="">Image-to-Image Translation Using Conditional Adversarial Networks</a>:
 
+```
 @article{pix2pix2016,
   title={Image-to-Image Translation with Conditional Adversarial Networks},
   author={Isola, Phillip and Zhu, Jun-Yan and Zhou, Tinghui and Efros, Alexei A},
   journal={arxiv},
   year={2016}
 }
+```
 
 ## Acknowledgments
 Code borrows heavily from https://github.com/soumith/dcgan.torch
