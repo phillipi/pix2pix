@@ -1,3 +1,7 @@
+--
+-- code derived from https://github.com/soumith/dcgan.torch
+--
+
 local util = {}
 
 require 'torch'

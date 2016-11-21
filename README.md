@@ -40,6 +40,8 @@ Switch 'AtoB' to 'BtoA' to train translation in opposite direction.
 
 Models are saved to './checkpoints/expt_name' (can be changed by modifying 'opt.checkpoint_dir' in train.lua).
 
+See 'opt' in train.lua for additional training options.
+
 ## Test
 ```bash
 	DATA_ROOT=/path/to/data/ name=expt_name which_direction=AtoB phase=val th test.lua
@@ -48,6 +50,8 @@ Models are saved to './checkpoints/expt_name' (can be changed by modifying 'opt.
 This will run the model named 'expt_name' in direction 'AtoB' on all images in '/path/to/data/val'.
 
 Result images, and a webpage to view them, are saved to './results/expt_name' (can be changed by modifying 'opt.results_dir' in test.lua).
+
+See 'opt' in test.lua for additional testing options.
 
 ## Display UI
 Optionally, for displaying images during training and test, use the [display package](https://github.com/szym/display).
