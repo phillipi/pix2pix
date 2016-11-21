@@ -1,13 +1,13 @@
 # pix2pix
-Generating pixels from pixels. Learns a mapping from input images, e.g., A.jpg to output images, e.g., B.jpg.
+Generating pixels from pixels. Learns a mapping from input images to target output images, for example:
+
 
 ## Setup
 
 ### Prerequisites
-Linux or OSX
-python with numpy
-NVIDIA GPU, CUDA, and CuDNN 
-- (CPU mode and CUDA without CuDNN may work with minimal modification, but untested)
+- Linux or OSX
+- python with numpy
+- NVIDIA GPU, CUDA, and CuDNN (CPU mode and CUDA without CuDNN may work with minimal modification, but untested)
 
 ### Installation
 Install torch and dependencies from https://github.com/torch/distro 
