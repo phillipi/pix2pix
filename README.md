@@ -20,9 +20,9 @@ Code for the paper <a href="">Image-to-Image Translation Using Conditional Adver
 ### Setup training and test data
 We require training data in the form of pairs of images {A,B}. For example, these might be pairs {label map, photo} or {bw image, color image}. Then we can learn to translate A to B or B to A:
 
-Create folder '/path/to/data' with subfolders 'A' and 'B'. 'A' and 'B' should each have their own subfolders 'train', 'val', 'test', etc. In '/path/to/data/A/train', put training images in style 'A'. In '/path/to/data/B/train', put the corresponding images in style 'B'. Repeat same for other data splits, e.g., 'val', 'test', etc.
+Create folder `/path/to/data` with subfolders `A` and `B`. `A` and `B` should each have their own subfolders `train`, `val`, `test`, etc. In `/path/to/data/A/train`, put training images in style A. In `/path/to/data/B/train`, put the corresponding images in style B. Repeat same for other data splits (`val`, `test`, etc).
 
-Corresponding images must have the same filename, i.e. '/path/to/data/A/train/1.jpg' is considered to correspond to '/path/to/data/B/train/1.jpg'.
+Corresponding images in a pair {A,B} must have the same filename, e.g. `/path/to/data/A/train/1.jpg` is considered to correspond to `/path/to/data/B/train/1.jpg`.
 
 Once the data is formatted this way, call:
 ```bash
@@ -36,22 +36,22 @@ This will combine each pair of images (A,B) into a single image file, ready for 
 	DATA_ROOT=/path/to/data/ name=expt_name which_direction=AtoB th train.lua
 ```
 
-Switch 'AtoB' to 'BtoA' to train translation in opposite direction.
+Switch `AtoB` to `BtoA` to train translation in opposite direction.
 
-Models are saved to './checkpoints/expt_name' (can be changed by modifying 'opt.checkpoint_dir' in train.lua).
+Models are saved to `./checkpoints/expt_name` (can be changed by modifying `opt.checkpoint_dir` in train.lua).
 
-See 'opt' in train.lua for additional training options.
+See `opt` in train.lua for additional training options.
 
 ## Test
 ```bash
 	DATA_ROOT=/path/to/data/ name=expt_name which_direction=AtoB phase=val th test.lua
 ```
 
-This will run the model named 'expt_name' in direction 'AtoB' on all images in '/path/to/data/val'.
+This will run the model named `expt_name` in direction `AtoB` on all images in `/path/to/data/val`.
 
-Result images, and a webpage to view them, are saved to './results/expt_name' (can be changed by modifying 'opt.results_dir' in test.lua).
+Result images, and a webpage to view them, are saved to `./results/expt_name` (can be changed by modifying `opt.results_dir` in test.lua).
 
-See 'opt' in test.lua for additional testing options.
+See `opt` in test.lua for additional testing options.
 
 ## Display UI
 Optionally, for displaying images during training and test, use the [display package](https://github.com/szym/display).
