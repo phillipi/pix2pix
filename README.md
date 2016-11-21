@@ -1,20 +1,20 @@
 # pix2pix
-Generating pixels from pixels
+Generating pixels from pixels. Learns a mapping from input images, e.g., A.jpg to output images, e.g., B.jpg.
 
 ## Setup
 
-# Prerequisites
+### Prerequisites
 Linux or OSX
 python with numpy
 NVIDIA GPU, CUDA, and CuDNN 
 - (CPU mode and CUDA without CuDNN may work with minimal modification, but untested)
 
-# Installation
+### Installation
 Install torch and dependencies from https://github.com/torch/distro 
 Clone this repo:
 	git clone git@github.com:phillipi/pix2pix.git
 
-# Setup training and test data
+### Setup training and test data
 We require training data in the form of pairs of images (A,B). For example, these might be pairs (label map, photo) or (bw image, color image). Then we can learn to translate A to B or B to A:
 
 Create folder '/path/to/data' with subfolders 'A' and 'B'. 'A' and 'B' should each have their own subfolders 'train', 'val', 'test', etc. In '/path/to/data/A/train', put training images in style 'A'. In '/path/to/data/B/train', put the corresponding images in style 'B'. Repeat same for other data splits, e.g., 'val', 'test', etc.
