@@ -1,4 +1,7 @@
 -- usage example: DATA_ROOT=/path/to/data/ which_direction=BtoA name=expt1 th train.lua 
+--
+-- code derived from https://github.com/soumith/dcgan.torch
+--
 
 require 'torch'
 require 'nn'
@@ -25,29 +28,28 @@ opt = {
    display = 1,            -- display samples while training. 0 = false
    display_id = 10,        -- display window id.
    gpu = 1,                -- gpu = 0 is CPU mode. gpu=X is GPU mode on GPU X
-   name = '',
-   which_direction = 'AtoB',
-   phase = 'train',
-   preprocess = 'regular',
-   nThreads = 2,           -- threads for loading data
-   save_freq = 50,         -- save a model every save_freq epochs
-   latest_freq = 5,        -- save the latest model every latest_freq epochs
-   save_iters = 5000,           -- save the latest model every save_iters iterations 
-   print_freq = 50,        -- print the debug information every print_freq iterations
-   display_freq = 100,      -- display the current results every display_freq iterations
-   save_display_freq = 5000, -- save the current display of results every save_display_freq_iterations
-   continue_train=1,  -- if continue training, load the latest model: 1: true, 0: false
-   serial_batches = 0,        -- if 1, takes images in order to make batches, otherwise takes them randomly
-   serial_batch_iter = 1,     -- iter into serial image list
-   checkpoints_dir = '/data/efros/isola/pix2pix/checkpoints',
-   cudnn = 1, -- set to 0 to not use cudnn
-   condition_GAN = 1, -- set to 0 to use unconditional GAN
-   use_GAN = 1, -- set to 0 to turn off GAN term
-   use_L1 = 1, -- set to 0 to turn off L1 term
-   which_model_netD = 'basic_v1',
-   which_model_netG = 'unet',
-   n_layers_D = 0, -- only used if which_model_netD=='n_layers'
-   lambda = 100, -- weight on L1 term in objective
+   name = '',              -- name of the experiment, should generally be passed on the command line
+   which_direction = 'AtoB',    -- AtoB or BtoA
+   phase = 'train',             -- train, val, test, etc
+   preprocess = 'regular',      -- for special purpose preprocessing, e.g., for colorization, change this (selects preprocessing functions in util.lua)
+   nThreads = 2,                -- # threads for loading data
+   save_epoch_freq = 50,        -- save a model every save_epoch_freq epochs (does not overwrite previously saved models)
+   save_latest_freq = 5000,     -- save the latest model every latest_freq epochs (overwrites the previous latest model)
+   print_freq = 50,             -- print the debug information every print_freq iterations
+   display_freq = 100,          -- display the current results every display_freq iterations
+   save_display_freq = 5000,    -- save the current display of results every save_display_freq_iterations
+   continue_train=1,            -- if continue training, load the latest model: 1: true, 0: false
+   serial_batches = 0,          -- if 1, takes images in order to make batches, otherwise takes them randomly
+   serial_batch_iter = 1,       -- iter into serial image list
+   checkpoints_dir = './checkpoints', -- models are saved here
+   cudnn = 1,                         -- set to 0 to not use cudnn (untested)
+   condition_GAN = 1,                 -- set to 0 to use unconditional discriminator
+   use_GAN = 1,                       -- set to 0 to turn off GAN term
+   use_L1 = 1,                        -- set to 0 to turn off L1 term
+   which_model_netD = 'basic', -- selects model to use for netD
+   which_model_netG = 'unet',  -- selects model to use for netG
+   n_layers_D = 0,             -- only used if which_model_netD=='n_layers'
+   lambda = 100,               -- weight on L1 term in objective
 }
 
 -- one-line argument parser. parses enviroment variables to override the defaults
@@ -360,7 +362,7 @@ for epoch = 1, opt.niter do
         end
         
         -- logging
-        if ((i-1) / opt.batchSize) % opt.print_freq == 0 then
+        if counter % opt.print_freq == 0 then
             print(('Epoch: [%d][%8d / %8d]\t Time: %.3f  DataTime: %.3f  '
                     .. '  Err_G: %.4f  Err_D: %.4f  ErrL1: %.4f'):format(
                      epoch, ((i-1) / opt.batchSize),
@@ -369,7 +371,8 @@ for epoch = 1, opt.niter do
                      errG and errG or -1, errD and errD or -1, errL1 and errL1 or -1))
         end
         
-        if counter % opt.save_iters == 0 then
+        -- save latest model
+        if counter % opt.save_latest_freq == 0 then
             print(('saving the latest model (epoch %d, iters %d)'):format(epoch, counter))
             torch.save(paths.concat(opt.checkpoints_dir, opt.name, 'latest_net_G.t7'), netG:clearState())
             torch.save(paths.concat(opt.checkpoints_dir, opt.name, 'latest_net_D.t7'), netD:clearState())
@@ -381,16 +384,9 @@ for epoch = 1, opt.niter do
     parametersD, gradParametersD = nil, nil -- nil them to avoid spiking memory
     parametersG, gradParametersG = nil, nil
     
-    if epoch % opt.save_freq == 0 then
+    if epoch % opt.save_epoch_freq == 0 then
         torch.save(paths.concat(opt.checkpoints_dir, opt.name,  epoch .. '_net_G.t7'), netG:clearState())
         torch.save(paths.concat(opt.checkpoints_dir, opt.name, epoch .. '_net_D.t7'), netD:clearState())
-    end
-    
-    -- cache latest model
-    if epoch % opt.latest_freq == 0 then
-        print(('save the latest model (epoch %d, iters %d)'):format(epoch, counter))
-        torch.save(paths.concat(opt.checkpoints_dir, opt.name, 'latest_net_G.t7'), netG:clearState())
-        torch.save(paths.concat(opt.checkpoints_dir, opt.name, 'latest_net_D.t7'), netD:clearState())
     end
     
     print(('End of epoch %d / %d \t Time Taken: %.3f'):format(

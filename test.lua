@@ -1,4 +1,7 @@
 -- usage: DATA_ROOT=/path/to/data/ name=expt1 which_direction=BtoA th test.lua
+--
+-- code derived from https://github.com/soumith/dcgan.torch
+--
 
 require 'image'
 require 'nn'
@@ -7,29 +10,27 @@ util = paths.dofile('util.lua')
 torch.setdefaulttensortype('torch.FloatTensor')
 
 opt = {
-    DATA_ROOT = '',         -- path to images (should have subfolders 'train', 'val', etc)
-    batchSize = 1,          -- # images in batch
-    loadSize = 256,         -- scale images to this size
-    fineSize = 256,         --  then crop to this size
-    flip=0,                 -- horizontal mirroring data augmentation
-    display = 1,            -- display samples while training. 0 = false
-    display_id = 200,       -- display window id.
-    gpu = 1,                -- gpu = 0 is CPU mode. gpu=X is GPU mode on GPU X
-    how_many = 'all',           -- how many test images to run 
-    which_direction = 'BtoA',
-    phase = 'val',
-    preprocess = 'regular',
-    aspect_ratio = 1.0,        -- aspect ratio
-    name = '',
-    input_nc = 3, 
-    output_nc = 3,
-    serial_batches = 0,        -- if 1, takes images in order to make batches, otherwise takes them randomly
-    serial_batch_iter = 1,     -- iter into serial image list
-    preload_data = false,
-    checkpoints_dir = '/data/efros/isola/pix2pix/checkpoints',
-    results_dir='/data/efros/isola/pix2pix/results/',
-    cudnn = 1, -- set to 0 to not use cudnn
-    which_epoch = 'latest',
+    DATA_ROOT = '',           -- path to images (should have subfolders 'train', 'val', etc)
+    batchSize = 1,            -- # images in batch
+    loadSize = 256,           -- scale images to this size
+    fineSize = 256,           --  then crop to this size
+    flip=0,                   -- horizontal mirroring data augmentation
+    display = 1,              -- display samples while training. 0 = false
+    display_id = 200,         -- display window id.
+    gpu = 1,                  -- gpu = 0 is CPU mode. gpu=X is GPU mode on GPU X
+    how_many = 'all',         -- how many test images to run (set to all to run on every image found in the data/phase folder)
+    which_direction = 'BtoA', -- AtoB or BtoA
+    phase = 'val',            -- train, val, test ,etc
+    preprocess = 'regular',   -- for special purpose preprocessing, e.g., for colorization, change this (selects preprocessing functions in util.lua)
+    aspect_ratio = 1.0,       -- aspect ratio of result images
+    name = '',                -- name of experiment, selects which model to run, should generally should be passed on command line
+    input_nc = 3,             -- #  of input image channels
+    output_nc = 3,            -- #  of output image channels
+    serial_batches = 1,       -- if 1, takes images in order to make batches, otherwise takes them randomly
+    serial_batch_iter = 1,    -- iter into serial image list
+    checkpoints_dir = './checkpoints', -- loads models from here
+    results_dir='./results/',          -- saves results here
+    which_epoch = 'latest',            -- which epoch to test? set to 'latest' to use latest cached model
 }
 
 
