@@ -68,6 +68,34 @@ By default, the server listens on localhost. Pass `0.0.0.0` to allow external co
 ```
 Then open `http://(hostname):(port)/` in your browser to load the remote desktop.
 
+## Example on facade generation
+
+Let's try an example of training and testing on facade generation, using data from the <a href="http://cmp.felk.cvut.cz/~tylecr1/facade/">CMP Facades dataset</a>.
+
+First, grab a copy of the data, formatted for training:
+
+```bash
+	wget -r --no-parent https://people.eecs.berkeley.edu/~isola/pix2pix/facades/ -O /path/to/data/facades
+```
+
+Next train:
+```bash
+	DATA_ROOT=/path/to/data/facades name=facades_generation which_direction=AtoB th train.lua
+```
+
+Start the display server to results as the model trains:
+```bash
+	th -ldisplay.start 8000 0.0.0.0
+```
+
+Finally, test:
+```bash
+	DATA_ROOT=/path/to/data/facades name=facades_generation which_direction=AtoB phase=val th test.lua
+```
+
+And view results by opening: `/path/to/data/facades/results/facades_generation/latest_net_G_val/index.html`.
+
+
 ## Citation
 If you use this code for your research, please cite our paper <a href="">Image-to-Image Translation Using Conditional Adversarial Networks</a>:
 
