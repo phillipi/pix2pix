@@ -1,7 +1,9 @@
 # pix2pix
-Code for the paper <a href="">Image-to-Image Translation Using Conditional Adversarial Networks</a>. Learns a mapping from input images to target output images, for example:
+Code for the paper <a href="">Image-to-Image Translation Using Conditional Adversarial Networks</a>. Learns a mapping from input images to output images, for example:
 
 <img src="imgs/examples.png" width="900px"/>
+
+On certain tasks, decent results can be obtained fairly quickly and on small datasets. For example, to generate the facade example above, we trained on just 400 images for about 2 hours (on a single Pascal Titan X GPU).
 
 ## Setup
 
