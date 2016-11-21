@@ -99,52 +99,6 @@ function defineG_unet(input_nc, output_nc, ngf)
     return netG
 end
 
-function defineD_unet(input_nc, output_nc, ndf)
-    local netD = nn.Sequential()
-
-    -- input is (nc) x 256 x 256
-    e1 = - nn.SpatialConvolution(input_nc+output_nc, ndf, 4, 4, 2, 2, 1, 1)
-    -- input is (ngf) x 128 x 128
-    e2 = e1 - nn.LeakyReLU(0.2, true) - nn.SpatialConvolution(ndf, ndf * 2, 4, 4, 2, 2, 1, 1) - nn.SpatialBatchNormalization(ndf * 2)
-    -- input is (ngf * 2) x 64 x 64
-    e3 = e2 - nn.LeakyReLU(0.2, true) - nn.SpatialConvolution(ndf * 2, ndf * 4, 4, 4, 2, 2, 1, 1) - nn.SpatialBatchNormalization(ndf * 4)
-    -- input is (ngf * 4) x 32 x 32
-    e4 = e3 - nn.LeakyReLU(0.2, true) - nn.SpatialConvolution(ndf * 4, ndf * 8, 4, 4, 2, 2, 1, 1) - nn.SpatialBatchNormalization(ndf * 8)
-    -- input is (ngf * 8) x 16 x 16
-    e5 = e4 - nn.LeakyReLU(0.2, true) - nn.SpatialConvolution(ndf * 8, ndf * 8, 4, 4, 2, 2, 1, 1) - nn.SpatialBatchNormalization(ndf * 8)
-    -- input is (ngf * 8) x 8 x 8
-    e6 = e5 - nn.LeakyReLU(0.2, true) - nn.SpatialConvolution(ndf * 8, ndf * 8, 4, 4, 2, 2, 1, 1) - nn.SpatialBatchNormalization(ndf * 8)
-    -- input is (ngf * 8) x 4 x 4
-    e7 = e6 - nn.LeakyReLU(0.2, true) - nn.SpatialConvolution(ndf * 8, ndf * 8, 4, 4) - nn.SpatialBatchNormalization(ndf * 8)
-    -- input is (ngf * 8) x 1 x 1
-    
-    d1_ = e7 - nn.ReLU(true) - nn.SpatialFullConvolution(ndf * 8, ndf * 8, 4, 4) - nn.SpatialBatchNormalization(ndf * 8)
-    -- input is (ngf * 8) x 4 x 4
-    d1 = {d1_,e6} - nn.JoinTable(2)
-    d2_ = d1 - nn.ReLU(true) - nn.SpatialFullConvolution(ndf * 8 * 2, ndf * 8, 4, 4, 2, 2, 1, 1) - nn.SpatialBatchNormalization(ndf * 8)
-    -- input is (ngf * 8) x 8 x 8
-    d2 = {d2_,e5} - nn.JoinTable(2)
-    d3_ = d2 - nn.ReLU(true) - nn.SpatialFullConvolution(ndf * 8 * 2, ndf * 8, 4, 4, 2, 2, 1, 1) - nn.SpatialBatchNormalization(ndf * 8)
-    -- input is (ngf * 8) x 16 x 16
-    d3 = {d3_,e4} - nn.JoinTable(2)
-    d4_ = d3 - nn.ReLU(true) - nn.SpatialFullConvolution(ndf * 8 * 2, ndf * 4, 4, 4, 2, 2, 1, 1) - nn.SpatialBatchNormalization(ndf * 4)
-    -- input is (ngf * 8) x 32 x 32
-    d4 = {d4_,e3} - nn.JoinTable(2)
-    d5_ = d4 - nn.ReLU(true) - nn.SpatialFullConvolution(ndf * 4 * 2, ndf * 2, 4, 4, 2, 2, 1, 1) - nn.SpatialBatchNormalization(ndf * 2)
-    -- input is (ngf * 4) x 64 x 64
-    d5 = {d5_,e2} - nn.JoinTable(2)
-    d6_ = d5 - nn.ReLU(true) - nn.SpatialFullConvolution(ndf * 2 * 2, ndf, 4, 4, 2, 2, 1, 1) - nn.SpatialBatchNormalization(ndf)
-    -- input is (ngf * 2) x 128 x 128
-    d6 = {d6_,e1} - nn.JoinTable(2)
-    d7 = d6 - nn.ReLU(true) - nn.SpatialConvolution(ndf * 1 * 2, 1, 4, 4, 1, 1, 0, 0)
-    
-    o1 = d7 - nn.Sigmoid()
-    
-    netD = nn.gModule({e1},{o1})
-   
-    return netD
-end
-
 function defineD_basic(input_nc, output_nc, ndf)
     
     n_layers = 3
