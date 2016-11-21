@@ -215,7 +215,7 @@ end
 
 function util.cudnn(net)
 	require 'cudnn'
-	require 'cudnn_convert_custom'
+	require 'util/cudnn_convert_custom'
 	return cudnn_convert_custom(net, cudnn)
 end
 
