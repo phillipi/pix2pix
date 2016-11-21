@@ -1,6 +1,6 @@
 # pix2pix
 Code for the paper <a href="">Image-to-Image Translation Using Conditional Adversarial Networks</a>. Learns a mapping from input images to target output images, for example:
-
+<img src="imgs/examples.png" width="360px"/>
 
 ## Setup
 
