@@ -3,7 +3,7 @@
 
 Torch implementation for learning a mapping from input images to output images, for example:
 
-<img src="imgs/examples.png" width="900px"/>
+<img src="imgs/examples.jpg" width="900px"/>
 
 Image-to-Image Translation Using Conditional Adversarial Networks  
  [Phillip Isola](http://web.mit.edu/phillipi/), [Jun-Yan Zhu](https://people.eecs.berkeley.edu/~junyanz/), [Tinghui Zhou](https://people.eecs.berkeley.edu/~tinghuiz/), [Alexei A. Efros](https://people.eecs.berkeley.edu/~efros/)   
