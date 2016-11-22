@@ -68,7 +68,7 @@ By default, the server listens on localhost. Pass `0.0.0.0` to allow external co
 ```
 Then open `http://(hostname):(port)/` in your browser to load the remote desktop.
 
-## Example on facade generation
+## Example usage on facade generation
 
 Let's try an example of training and testing on facade generation, using data from the <a href="http://cmp.felk.cvut.cz/~tylecr1/facade/">CMP Facades dataset</a>.
 
@@ -100,7 +100,7 @@ The test results will be saved to an html file here: `/path/to/data/facades/resu
 
 
 ## Citation
-If you use this code for your research, please cite our paper <a href="">Image-to-Image Translation Using Conditional Adversarial Networks</a>:
+If you use this code for your research, please cite our paper <a href="https://arxiv.org/pdf/1611.07004v1.pdf">Image-to-Image Translation Using Conditional Adversarial Networks</a>:
 
 ```
 @article{pix2pix2016,
