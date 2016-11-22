@@ -1,5 +1,5 @@
 # pix2pix
-Code for the paper <a href="">Image-to-Image Translation Using Conditional Adversarial Networks</a>. Learns a mapping from input images to output images, for example:
+Code for the paper <a href="https://phillipi.github.io/pix2pix/">Image-to-Image Translation Using Conditional Adversarial Networks</a>. Learns a mapping from input images to output images, for example:
 
 <img src="imgs/examples.png" width="900px"/>
 
@@ -83,7 +83,7 @@ First, grab a copy of the data, already formatted for training:
 
 Next train:
 ```bash
-	DATA_ROOT=/path/to/data/facades name=facades_generation which_direction=AtoB th train.lua
+	DATA_ROOT=/path/to/data/facades name=facades_generation which_direction=BtoA th train.lua
 ```
 
 Start the display server to view results as the model trains:
@@ -93,7 +93,7 @@ Start the display server to view results as the model trains:
 
 Finally, test:
 ```bash
-	DATA_ROOT=/path/to/data/facades name=facades_generation which_direction=AtoB phase=val th test.lua
+	DATA_ROOT=/path/to/data/facades name=facades_generation which_direction=BtoA phase=val th test.lua
 ```
 
 The test results will be saved to an html file here: `/path/to/data/facades/results/facades_generation/latest_net_G_val/index.html`.
