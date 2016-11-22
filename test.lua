@@ -6,7 +6,7 @@
 require 'image'
 require 'nn'
 require 'nngraph'
-util = paths.dofile('util.lua')
+util = paths.dofile('util/util.lua')
 torch.setdefaulttensortype('torch.FloatTensor')
 
 opt = {
