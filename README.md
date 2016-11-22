@@ -1,13 +1,13 @@
 # pix2pix
-[[Project]](https://phillipi.github.io/pix2pix/)   [[arxiv]](https://arxiv.org/pdf/1611.07004v1.pdf)
+[[Project]](https://phillipi.github.io/pix2pix/)   [[Arxiv]](https://arxiv.org/pdf/1611.07004v1.pdf)
 
 Torch implementation for learning a mapping from input images to output images, for example:
 
 <img src="imgs/examples.png" width="900px"/>
 
-"Image-to-Image Translation Using Conditional Adversarial Networks"  
+Image-to-Image Translation Using Conditional Adversarial Networks  
  [Phillip Isola](http://web.mit.edu/phillipi/), [Jun-Yan Zhu](https://people.eecs.berkeley.edu/~junyanz/), [Tinghui Zhou](https://people.eecs.berkeley.edu/~tinghuiz/), [Alexei A. Efros](https://people.eecs.berkeley.edu/~efros/)   
- arxiv, 2016.
+ In arxiv, 2016.
 
 On some tasks, decent results can be obtained fairly quickly and on small datasets. For example, to learn to generate facades (example shown above), we trained on just 400 images for about 2 hours (on a single Pascal Titan X GPU).
 
@@ -33,7 +33,7 @@ bash ./datasets/download_dataset.sh facades
 ```bash
 DATA_ROOT=./datasets/facades name=facades_generation which_direction=BtoA th train.lua
 ```
-- (Optionally) start the display server to view results as the model trains. (This requires torch package `display`. See `Display UI` for more details):
+- (Optionally) start the display server to view results as the model trains. (This requires torch package `display`. See [Display UI](#display-ui) for more details):
 ```bash
 th -ldisplay.start 8000 0.0.0.0
 ```
@@ -114,4 +114,4 @@ If you use this code for your research, please cite our paper <a href="https://a
 ```
 
 ## Acknowledgments
-Code borrows heavily from [DCGAN](https://github.com/soumith/dcgan.torch) and [Context-Encoder](https://github.com/pathak22/context-encoder).
+Code borrows heavily from [DCGAN](https://github.com/soumith/dcgan.torch). The data loader is modified from [DCGAN](https://github.com/soumith/dcgan.torch) and  [Context-Encoder](https://github.com/pathak22/context-encoder).
