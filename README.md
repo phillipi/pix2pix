@@ -33,7 +33,7 @@ bash ./datasets/download_dataset.sh facades
 ```bash
 DATA_ROOT=./datasets/facades name=facades_generation which_direction=BtoA th train.lua
 ```
-- (Optionally) start the display server to view results as the model trains. (This requires`display` package. See `Display UI` for more details):
+- (Optionally) start the display server to view results as the model trains. (This requires torch package `display`. See `Display UI` for more details):
 ```bash
 th -ldisplay.start 8000 0.0.0.0
 ```
