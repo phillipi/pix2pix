@@ -28,6 +28,7 @@ opt = {
     output_nc = 3,            -- #  of output image channels
     serial_batches = 1,       -- if 1, takes images in order to make batches, otherwise takes them randomly
     serial_batch_iter = 1,    -- iter into serial image list
+    cudnn = 1,                -- set to 0 to not use cudnn (untested)
     checkpoints_dir = './checkpoints', -- loads models from here
     results_dir='./results/',          -- saves results here
     which_epoch = 'latest',            -- which epoch to test? set to 'latest' to use latest cached model
