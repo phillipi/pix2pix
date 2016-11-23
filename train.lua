@@ -13,7 +13,7 @@ require 'models'
 
 opt = {
    DATA_ROOT = '',         -- path to images (should have subfolders 'train', 'val', etc)
-   batchSize = 1,          -- # images in batch
+   batchSize = 10,          -- # images in batch
    loadSize = 286,         -- scale images to this size
    fineSize = 256,         --  then crop to this size
    ngf = 64,               -- #  of gen filters in first conv layer
@@ -21,28 +21,28 @@ opt = {
    input_nc = 3,           -- #  of input image channels
    output_nc = 3,          -- #  of output image channels
    niter = 200,            -- #  of iter at starting learning rate
-   lr = 0.0002,            -- initial learning rate for adam
+   lr = 0.0002*10,            -- initial learning rate for adam
    beta1 = 0.5,            -- momentum term of adam
    ntrain = math.huge,     -- #  of examples per epoch. math.huge for full dataset
    flip = 1,               -- if flip the images for data argumentation
    display = 1,            -- display samples while training. 0 = false
    display_id = 10,        -- display window id.
-   gpu = 1,                -- gpu = 0 is CPU mode. gpu=X is GPU mode on GPU X
+   gpu = 0,                -- gpu = 0 is CPU mode. gpu=X is GPU mode on GPU X
    name = '',              -- name of the experiment, should generally be passed on the command line
    which_direction = 'AtoB',    -- AtoB or BtoA
    phase = 'train',             -- train, val, test, etc
    preprocess = 'regular',      -- for special purpose preprocessing, e.g., for colorization, change this (selects preprocessing functions in util.lua)
-   nThreads = 2,                -- # threads for loading data
-   save_epoch_freq = 50,        -- save a model every save_epoch_freq epochs (does not overwrite previously saved models)
+   nThreads = 4,                -- # threads for loading data
+   save_epoch_freq = 5,        -- save a model every save_epoch_freq epochs (does not overwrite previously saved models)
    save_latest_freq = 5000,     -- save the latest model every latest_freq sgd iterations (overwrites the previous latest model)
-   print_freq = 50,             -- print the debug information every print_freq iterations
+   print_freq = 200,             -- print the debug information every print_freq iterations
    display_freq = 100,          -- display the current results every display_freq iterations
    save_display_freq = 5000,    -- save the current display of results every save_display_freq_iterations
    continue_train=0,            -- if continue training, load the latest model: 1: true, 0: false
    serial_batches = 0,          -- if 1, takes images in order to make batches, otherwise takes them randomly
    serial_batch_iter = 1,       -- iter into serial image list
    checkpoints_dir = './checkpoints', -- models are saved here
-   cudnn = 1,                         -- set to 0 to not use cudnn (untested)
+   cudnn = 0,                         -- set to 0 to not use cudnn (untested)
    condition_GAN = 1,                 -- set to 0 to use unconditional discriminator
    use_GAN = 1,                       -- set to 0 to turn off GAN term
    use_L1 = 1,                        -- set to 0 to turn off L1 term
@@ -188,6 +188,8 @@ if opt.gpu > 0 then
    end
    netD:cuda(); netG:cuda(); criterion:cuda(); criterionAE:cuda();
    print('done')
+else
+	print('running model on CPU')
 end
 
 
@@ -235,7 +237,11 @@ local fDx = function(x)
     
     -- Real
     local output = netD:forward(real_AB)
-    local label = torch.FloatTensor(output:size()):fill(real_label):cuda()
+    local label = torch.FloatTensor(output:size()):fill(real_label)
+    if opt.gpu>0 then 
+    	label = label:cuda()
+    end
+    
     local errD_real = criterion:forward(output, label)
     local df_do = criterion:backward(output, label)
     netD:backward(real_AB, df_do)
@@ -260,10 +266,17 @@ local fGx = function(x)
     gradParametersG:zero()
     
     -- GAN loss
-    local df_dg = torch.zeros(fake_B:size()):cuda()
+    local df_dg = torch.zeros(fake_B:size())
+    if opt.gpu>0 then 
+    	df_dg = df_dg:cuda();
+    end
+    
     if opt.use_GAN==1 then
        local output = netD.output -- netD:forward{input_A,input_B} was already executed in fDx, so save computation
-       local label = torch.FloatTensor(output:size()):fill(real_label):cuda() -- fake labels are real for generator cost
+       local label = torch.FloatTensor(output:size()):fill(real_label) -- fake labels are real for generator cost
+       if opt.gpu>0 then 
+       	label = label:cuda();
+       	end
        errG = criterion:forward(output, label)
        local df_do = criterion:backward(output, label)
        df_dg = netD:updateGradInput(fake_AB, df_do):narrow(2,fake_AB:size(2)-output_nc+1, output_nc)
@@ -272,7 +285,10 @@ local fGx = function(x)
     end
     
     -- unary loss
-    local df_do_AE = torch.zeros(fake_B:size()):cuda()
+    local df_do_AE = torch.zeros(fake_B:size())
+    if opt.gpu>0 then 
+    	df_do_AE = df_do_AE:cuda();
+    end
     if opt.use_L1==1 then
        errL1 = criterionAE:forward(fake_B, real_B)
        df_do_AE = criterionAE:backward(fake_B, real_B)
