@@ -42,7 +42,7 @@ opt = {
    serial_batches = 0,          -- if 1, takes images in order to make batches, otherwise takes them randomly
    serial_batch_iter = 1,       -- iter into serial image list
    checkpoints_dir = './checkpoints', -- models are saved here
-   cudnn = 1,                         -- set to 0 to not use cudnn (untested)
+   cudnn = 1,                         -- set to 0 to not use cudnn
    condition_GAN = 1,                 -- set to 0 to use unconditional discriminator
    use_GAN = 1,                       -- set to 0 to turn off GAN term
    use_L1 = 1,                        -- set to 0 to turn off L1 term
@@ -188,6 +188,8 @@ if opt.gpu > 0 then
    end
    netD:cuda(); netG:cuda(); criterion:cuda(); criterionAE:cuda();
    print('done')
+else
+	print('running model on CPU')
 end
 
 
@@ -235,7 +237,11 @@ local fDx = function(x)
     
     -- Real
     local output = netD:forward(real_AB)
-    local label = torch.FloatTensor(output:size()):fill(real_label):cuda()
+    local label = torch.FloatTensor(output:size()):fill(real_label)
+    if opt.gpu>0 then 
+    	label = label:cuda()
+    end
+    
     local errD_real = criterion:forward(output, label)
     local df_do = criterion:backward(output, label)
     netD:backward(real_AB, df_do)
@@ -260,10 +266,17 @@ local fGx = function(x)
     gradParametersG:zero()
     
     -- GAN loss
-    local df_dg = torch.zeros(fake_B:size()):cuda()
+    local df_dg = torch.zeros(fake_B:size())
+    if opt.gpu>0 then 
+    	df_dg = df_dg:cuda();
+    end
+    
     if opt.use_GAN==1 then
        local output = netD.output -- netD:forward{input_A,input_B} was already executed in fDx, so save computation
-       local label = torch.FloatTensor(output:size()):fill(real_label):cuda() -- fake labels are real for generator cost
+       local label = torch.FloatTensor(output:size()):fill(real_label) -- fake labels are real for generator cost
+       if opt.gpu>0 then 
+       	label = label:cuda();
+       	end
        errG = criterion:forward(output, label)
        local df_do = criterion:backward(output, label)
        df_dg = netD:updateGradInput(fake_AB, df_do):narrow(2,fake_AB:size(2)-output_nc+1, output_nc)
@@ -272,7 +285,10 @@ local fGx = function(x)
     end
     
     -- unary loss
-    local df_do_AE = torch.zeros(fake_B:size()):cuda()
+    local df_do_AE = torch.zeros(fake_B:size())
+    if opt.gpu>0 then 
+    	df_do_AE = df_do_AE:cuda();
+    end
     if opt.use_L1==1 then
        errL1 = criterionAE:forward(fake_B, real_B)
        df_do_AE = criterionAE:backward(fake_B, real_B)
