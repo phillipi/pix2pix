@@ -40,7 +40,7 @@ DATA_ROOT=./datasets/facades name=facades_generation which_direction=BtoA th tra
 ```
 - (CPU only) The same training command without using a GPU or CUDNN. Setting the environment variables ```gpu=0 cudnn=0``` forces CPU only
 ```bash
-DATA_ROOT=./datasets/facades name=facades_generation which_direction=BtoA gpu=0 cudnn=0 th train.lua
+DATA_ROOT=./datasets/facades name=facades_generation which_direction=BtoA gpu=0 cudnn=0 batchSize=10 save_epoch_freq=5 th train.lua
 ```
 - (Optionally) start the display server to view results as the model trains. ( See [Display UI](#display-ui) for more details):
 ```bash

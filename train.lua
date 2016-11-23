@@ -13,7 +13,7 @@ require 'models'
 
 opt = {
    DATA_ROOT = '',         -- path to images (should have subfolders 'train', 'val', etc)
-   batchSize = 10,          -- # images in batch
+   batchSize = 1,          -- # images in batch
    loadSize = 286,         -- scale images to this size
    fineSize = 256,         --  then crop to this size
    ngf = 64,               -- #  of gen filters in first conv layer
@@ -33,9 +33,9 @@ opt = {
    phase = 'train',             -- train, val, test, etc
    preprocess = 'regular',      -- for special purpose preprocessing, e.g., for colorization, change this (selects preprocessing functions in util.lua)
    nThreads = 2,                -- # threads for loading data
-   save_epoch_freq = 5,        -- save a model every save_epoch_freq epochs (does not overwrite previously saved models)
+   save_epoch_freq = 50,        -- save a model every save_epoch_freq epochs (does not overwrite previously saved models)
    save_latest_freq = 5000,     -- save the latest model every latest_freq sgd iterations (overwrites the previous latest model)
-   print_freq = 200,             -- print the debug information every print_freq iterations
+   print_freq = 50,             -- print the debug information every print_freq iterations
    display_freq = 100,          -- display the current results every display_freq iterations
    save_display_freq = 5000,    -- save the current display of results every save_display_freq_iterations
    continue_train=0,            -- if continue training, load the latest model: 1: true, 0: false
