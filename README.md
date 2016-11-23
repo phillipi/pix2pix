@@ -20,6 +20,11 @@ On some tasks, decent results can be obtained fairly quickly and on small datase
 
 ### Getting Started
 - Install torch and dependencies from https://github.com/torch/distro
+- Install torch packages `nngraph` and `display`
+```bash
+luarocks install nngraph
+luarocks install https://raw.githubusercontent.com/szym/display/master/display-scm-0.rockspec
+```
 - Clone this repo:
 ```bash
 git clone git@github.com:phillipi/pix2pix.git
@@ -33,7 +38,7 @@ bash ./datasets/download_dataset.sh facades
 ```bash
 DATA_ROOT=./datasets/facades name=facades_generation which_direction=BtoA th train.lua
 ```
-- (Optionally) start the display server to view results as the model trains. (This requires torch package `display`. See [Display UI](#display-ui) for more details):
+- (Optionally) start the display server to view results as the model trains. ( See [Display UI](#display-ui) for more details):
 ```bash
 th -ldisplay.start 8000 0.0.0.0
 ```
