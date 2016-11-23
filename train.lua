@@ -21,18 +21,18 @@ opt = {
    input_nc = 3,           -- #  of input image channels
    output_nc = 3,          -- #  of output image channels
    niter = 200,            -- #  of iter at starting learning rate
-   lr = 0.0002*10,            -- initial learning rate for adam
+   lr = 0.0002,            -- initial learning rate for adam
    beta1 = 0.5,            -- momentum term of adam
    ntrain = math.huge,     -- #  of examples per epoch. math.huge for full dataset
    flip = 1,               -- if flip the images for data argumentation
    display = 1,            -- display samples while training. 0 = false
    display_id = 10,        -- display window id.
-   gpu = 0,                -- gpu = 0 is CPU mode. gpu=X is GPU mode on GPU X
+   gpu = 1,                -- gpu = 0 is CPU mode. gpu=X is GPU mode on GPU X
    name = '',              -- name of the experiment, should generally be passed on the command line
    which_direction = 'AtoB',    -- AtoB or BtoA
    phase = 'train',             -- train, val, test, etc
    preprocess = 'regular',      -- for special purpose preprocessing, e.g., for colorization, change this (selects preprocessing functions in util.lua)
-   nThreads = 4,                -- # threads for loading data
+   nThreads = 2,                -- # threads for loading data
    save_epoch_freq = 5,        -- save a model every save_epoch_freq epochs (does not overwrite previously saved models)
    save_latest_freq = 5000,     -- save the latest model every latest_freq sgd iterations (overwrites the previous latest model)
    print_freq = 200,             -- print the debug information every print_freq iterations
@@ -42,7 +42,7 @@ opt = {
    serial_batches = 0,          -- if 1, takes images in order to make batches, otherwise takes them randomly
    serial_batch_iter = 1,       -- iter into serial image list
    checkpoints_dir = './checkpoints', -- models are saved here
-   cudnn = 0,                         -- set to 0 to not use cudnn (untested)
+   cudnn = 1,                         -- set to 0 to not use cudnn
    condition_GAN = 1,                 -- set to 0 to use unconditional discriminator
    use_GAN = 1,                       -- set to 0 to turn off GAN term
    use_L1 = 1,                        -- set to 0 to turn off L1 term
