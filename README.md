@@ -51,7 +51,7 @@ th -ldisplay.start 8000 0.0.0.0
 ```bash
 DATA_ROOT=./datasets/facades name=facades_generation which_direction=BtoA phase=val th test.lua
 ```
-The test results will be saved to an html file here: `./datasets/facades/results/facades_generation/latest_net_G_val/index.html`.
+The test results will be saved to an html file here: `./results/facades_generation/latest_net_G_val/index.html`.
 
 ## Train
 ```bash
