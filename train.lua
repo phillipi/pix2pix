@@ -314,6 +314,16 @@ file = torch.DiskFile(paths.concat(opt.checkpoints_dir, opt.name, 'opt.txt'), 'w
 file:writeObject(opt)
 file:close()
 
+-- display plot config
+local plot_config = {
+  title = "Loss over time",
+  labels = {"epoch", "errG", "errD", "errL1"},
+  ylabel = "loss",
+}
+-- display plot vars
+local plot_data = {}
+local plot_win
+
 local counter = 0
 for epoch = 1, opt.niter do
     epoch_tm:reset()
@@ -328,7 +338,7 @@ for epoch = 1, opt.niter do
         
         -- (2) Update G network: maximize log(D(x,G(x))) + L1(y,G(x))
         optim.adam(fGx, parametersG, optimStateG)
-        
+
         -- display
         counter = counter + 1
         if counter % opt.display_freq == 0 and opt.display then
@@ -385,6 +395,10 @@ for epoch = 1, opt.niter do
                      math.floor(math.min(data:size(), opt.ntrain) / opt.batchSize),
                      tm:time().real / opt.batchSize, data_tm:time().real / opt.batchSize,
                      errG and errG or -1, errD and errD or -1, errL1 and errL1 or -1))
+            -- update display plot
+            table.insert(plot_data, {epoch, errG, errD, errL1})
+            plot_config.win = plot_win
+            plot_win = disp.plot(plot_data, plot_config)
         end
         
         -- save latest model
