@@ -27,6 +27,7 @@ opt = {
    flip = 1,               -- if flip the images for data argumentation
    display = 1,            -- display samples while training. 0 = false
    display_id = 10,        -- display window id.
+   display_plot = 'errL1',    -- which loss values to plot over time. Accepted values include a comma seperated list of: errL1, errG, and errD
    gpu = 1,                -- gpu = 0 is CPU mode. gpu=X is GPU mode on GPU X
    name = '',              -- name of the experiment, should generally be passed on the command line
    which_direction = 'AtoB',    -- AtoB or BtoA
@@ -314,12 +315,21 @@ file = torch.DiskFile(paths.concat(opt.checkpoints_dir, opt.name, 'opt.txt'), 'w
 file:writeObject(opt)
 file:close()
 
+-- parse diplay_plot string into table
+opt.display_plot = string.split(string.gsub(opt.display_plot, "%s+", ""), ",")
+for k, v in ipairs(opt.display_plot) do
+    if not util.containsValue({"errG", "errD", "errL1"}, v) then 
+        error(string.format('bad display_plot value "%s"', v)) 
+    end
+end
+
 -- display plot config
 local plot_config = {
   title = "Loss over time",
-  labels = {"epoch", "errG", "errD", "errL1"},
+  labels = {"epoch", unpack(opt.display_plot)},
   ylabel = "loss",
 }
+
 -- display plot vars
 local plot_data = {}
 local plot_win
@@ -387,16 +397,26 @@ for epoch = 1, opt.niter do
             opt.serial_batches=serial_batches
         end
         
-        -- logging
+        -- logging and display plot
         if counter % opt.print_freq == 0 then
+            local loss = {errG=errG and errG or -1, errD=errD and errD or -1, errL1=errL1 and errL1 or -1}
+            local curItInBatch = ((i-1) / opt.batchSize)
+            local totalItInBatch = math.floor(math.min(data:size(), opt.ntrain) / opt.batchSize)
             print(('Epoch: [%d][%8d / %8d]\t Time: %.3f  DataTime: %.3f  '
                     .. '  Err_G: %.4f  Err_D: %.4f  ErrL1: %.4f'):format(
-                     epoch, ((i-1) / opt.batchSize),
-                     math.floor(math.min(data:size(), opt.ntrain) / opt.batchSize),
+                     epoch, curItInBatch, totalItInBatch,
                      tm:time().real / opt.batchSize, data_tm:time().real / opt.batchSize,
-                     errG and errG or -1, errD and errD or -1, errL1 and errL1 or -1))
+                     errG, errD, errL1))
+           
+            local plot_vals = { epoch + curItInBatch / totalItInBatch }
+            for k, v in ipairs(opt.display_plot) do
+              if loss[v] ~= nil then
+               plot_vals[#plot_vals + 1] = loss[v] 
+             end
+            end
+
             -- update display plot
-            table.insert(plot_data, {epoch, errG, errD, errL1})
+            table.insert(plot_data, plot_vals)
             plot_config.win = plot_win
             plot_win = disp.plot(plot_data, plot_config)
         end

@@ -111,6 +111,8 @@ th -ldisplay.start 8000 0.0.0.0
 ```
 Then open `http://(hostname):(port)/` in your browser to load the remote desktop.
 
+L1 error is plotted to the display by default. Set the environment variable `display_plot` to a comma-seperated list of values `errL1`, `errG` and `errD` to visualize the L1, generator, and descriminator error respectively. For example, to plot only the generator and descriminator errors to the display instead of the default L1 error, set `display_plot="errG,errD"`.
+
 ## Citation
 If you use this code for your research, please cite our paper <a href="https://arxiv.org/pdf/1611.07004v1.pdf">Image-to-Image Translation Using Conditional Adversarial Networks</a>:
 
