@@ -416,9 +416,11 @@ for epoch = 1, opt.niter do
             end
 
             -- update display plot
-            table.insert(plot_data, plot_vals)
-            plot_config.win = plot_win
-            plot_win = disp.plot(plot_data, plot_config)
+            if opt.display then
+              table.insert(plot_data, plot_vals)
+              plot_config.win = plot_win
+              plot_win = disp.plot(plot_data, plot_config)
+            end
         end
         
         -- save latest model
