@@ -1,3 +1,4 @@
+
 # pix2pix
 [[Project]](https://phillipi.github.io/pix2pix/)   [[Arxiv]](https://arxiv.org/pdf/1611.07004v1.pdf)
 
@@ -81,7 +82,10 @@ Download the datasets using the following script (more datasets are coming soon!
 bash ./datasets/download_dataset.sh dataset_name
 ```
 - `facades`: 400 images from [CMP Facades dataset](http://cmp.felk.cvut.cz/~tylecr1/facade/).
-
+- `cityscapes`: 2975 images from the [Cityscapes training set](https://www.cityscapes-dataset.com/).
+- `maps`: 1096 training images scraped from Google Maps
+- `edges2shoes`: 50k training images from [UT Zappos50K dataset](http://vision.cs.utexas.edu/projects/finegrained/utzap50k/). Edges are computed by [HED](https://github.com/s9xie/hed) edge detector + post-processing.
+- `edges2shoes`: 137K Amazon Handbag images from [iGAN project](https://github.com/junyanz/iGAN). Edges are computed by [HED](https://github.com/s9xie/hed) edge detector + post-processing.
 
 ### Setup Training and Test data
 We require training data in the form of pairs of images {A,B}, where A and B are two different depicitions of the same underlying scene. For example, these might be pairs {label map, photo} or {bw image, color image}. Then we can learn to translate A to B or B to A:
