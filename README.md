@@ -86,14 +86,14 @@ bash ./datasets/download_dataset.sh dataset_name
 - `edges2shoes`: 50k training images from [UT Zappos50K dataset](http://vision.cs.utexas.edu/projects/finegrained/utzap50k/). Edges are computed by [HED](https://github.com/s9xie/hed) edge detector + post-processing.
 - `edges2shoes`: 137K Amazon Handbag images from [iGAN project](https://github.com/junyanz/iGAN). Edges are computed by [HED](https://github.com/s9xie/hed) edge detector + post-processing.
 
-## Pretrained Models:
-Download the pretrained modes using the following script:
+## Models
+Download the pre-trained modes using the following script:
 ```bash
 bash ./models/download_model.sh model_name
 ```
-- `facades_label2image`: labels->facades; trained on the CMP Facades dataset.
-- `cityscapes_label2image`: labels->street scene; trained on the Cityscapes dataset.
-- `cityscapes_image2label`: street scene->labels; trained on the Cityscapes dataset.
+- `facades_label2image`: labels -> facades; trained on the CMP Facades dataset.
+- `cityscapes_label2image`: labels -> street scene; trained on the Cityscapes dataset.
+- `cityscapes_image2label`: street scene -> labels; trained on the Cityscapes dataset.
 - `map2sat`: aerial photo -> map; trained on Google maps.
 - `sat2map`: map -> aerial photo; trained on Google maps.
 - `edges2shoes`：edges -> photos; trained on UT Zappos50K dataset.
