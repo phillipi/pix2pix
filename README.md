@@ -99,7 +99,8 @@ bash ./models/download_model.sh model_name
 - `edges2shoes` (edges -> photos): trained on UT Zappos50K dataset.
 - `edges2handbags` (edges -> photos): train on Amazon handbags images.
 
-### Setup Training and Test data
+## Setup Training and Test data
+### Generating Pairs
 We provide a python script to generate training data in the form of pairs of images {A,B}, where A and B are two different depicitions of the same underlying scene. For example, these might be pairs {label map, photo} or {bw image, color image}. Then we can learn to translate A to B or B to A:
 
 Create folder `/path/to/data` with subfolders `A` and `B`. `A` and `B` should each have their own subfolders `train`, `val`, `test`, etc. In `/path/to/data/A/train`, put training images in style A. In `/path/to/data/B/train`, put the corresponding images in style B. Repeat same for other data splits (`val`, `test`, etc).
@@ -113,6 +114,8 @@ python data/combine_A_and_B.py --fold_A /path/to/data/A --fold_B /path/to/data/B
 
 This will combine each pair of images (A,B) into a single image file, ready for training.
 
+### Notes on Colorization
+No need to run `combine_A_and_B.py` for colorization. Instead, you just need to prepare some natural images, and set `preprocess=colorization` in the script. The program will automatically convert each RGB image into Lab color space, and create  `L -> ab` image pair during the training. 
 
 ## Display UI
 Optionally, for displaying images during training and test, use the [display package](https://github.com/szym/display).
