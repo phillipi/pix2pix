@@ -15,7 +15,8 @@ opt = {
    DATA_ROOT = '',         -- path to images (should have subfolders 'train', 'val', etc)
    batchSize = 1,          -- # images in batch
    loadSize = 286,         -- scale images to this size
-   fineSize = 256,         --  then crop to this size
+   imgWidth = 720,         --  then crop to this size
+   imgHeight = 1280,
    ngf = 64,               -- #  of gen filters in first conv layer
    ndf = 64,               -- #  of discrim filters in first conv layer
    input_nc = 3,           -- #  of input image channels
@@ -166,11 +167,11 @@ optimStateD = {
    beta1 = opt.beta1,
 }
 ----------------------------------------------------------------------------
-local real_A = torch.Tensor(opt.batchSize, input_nc, opt.fineSize, opt.fineSize)
-local real_B = torch.Tensor(opt.batchSize, output_nc, opt.fineSize, opt.fineSize)
-local fake_B = torch.Tensor(opt.batchSize, output_nc, opt.fineSize, opt.fineSize)
-local real_AB = torch.Tensor(opt.batchSize, output_nc + input_nc*opt.condition_GAN, opt.fineSize, opt.fineSize)
-local fake_AB = torch.Tensor(opt.batchSize, output_nc + input_nc*opt.condition_GAN, opt.fineSize, opt.fineSize)
+local real_A = torch.Tensor(opt.batchSize, input_nc, opt.imgWidth, opt.imgHeight)
+local real_B = torch.Tensor(opt.batchSize, output_nc, opt.imgWidth, opt.imgHeight)
+local fake_B = torch.Tensor(opt.batchSize, output_nc, opt.imgWidth, opt.imgHeight)
+local real_AB = torch.Tensor(opt.batchSize, output_nc + input_nc*opt.condition_GAN, opt.imgWidth, opt.imgHeight)
+local fake_AB = torch.Tensor(opt.batchSize, output_nc + input_nc*opt.condition_GAN, opt.imgWidth, opt.imgHeight)
 local errD, errG, errL1 = 0, 0, 0
 local epoch_tm = torch.Timer()
 local tm = torch.Timer()
