@@ -10,6 +10,7 @@ checkpoints/
 *.src.rock
 *.zip
 *.tar.gz
+*.t7
 
 # Object files
 *.o
