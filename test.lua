@@ -13,8 +13,8 @@ opt = {
     DATA_ROOT = '',           -- path to images (should have subfolders 'train', 'val', etc)
     batchSize = 1,            -- # images in batch
     loadSize = 256,           -- scale images to this size
-    imgWidth = 736,           -- then crop to this size. Both should be  multiples of 32...
-    imgHeight = 1280,
+    imgWidth = 256,           -- then crop to this size. Both should be  multiples of 32...
+    imgHeight = 512,
     flip=0,                   -- horizontal mirroring data augmentation
     display = 1,              -- display samples while training. 0 = false
     display_id = 200,         -- display window id.
