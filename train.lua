@@ -38,7 +38,7 @@ opt = {
    save_epoch_freq = 50,        -- save a model every save_epoch_freq epochs (does not overwrite previously saved models)
    save_latest_freq = 5000,     -- save the latest model every latest_freq sgd iterations (overwrites the previous latest model)
    print_freq = 50,             -- print the debug information every print_freq iterations
-   display_freq = 100,          -- display the current results every display_freq iterations
+   display_freq = 20,           -- display the current results every display_freq iterations
    save_display_freq = 5000,    -- save the current display of results every save_display_freq_iterations
    continue_train=0,            -- if continue training, load the latest model: 1: true, 0: false
    serial_batches = 0,          -- if 1, takes images in order to make batches, otherwise takes them randomly
@@ -355,16 +355,16 @@ for epoch = 1, opt.niter do
         if counter % opt.display_freq == 0 and opt.display then
             createRealFake()
             if opt.preprocess == 'colorization' then 
-                local real_A_s = util.scaleBatch(real_A:float(),100,100)
-                local fake_B_s = util.scaleBatch(fake_B:float(),100,100)
-                local real_B_s = util.scaleBatch(real_B:float(),100,100)
+                local real_A_s = util.scaleBatch(real_A:float(),256,512)
+                local fake_B_s = util.scaleBatch(fake_B:float(),256,512)
+                local real_B_s = util.scaleBatch(real_B:float(),256,512)
                 disp.image(util.deprocessL_batch(real_A_s), {win=opt.display_id, title=opt.name .. ' input'})
                 disp.image(util.deprocessLAB_batch(real_A_s, fake_B_s), {win=opt.display_id+1, title=opt.name .. ' output'})
                 disp.image(util.deprocessLAB_batch(real_A_s, real_B_s), {win=opt.display_id+2, title=opt.name .. ' target'})
             else
-                disp.image(util.deprocess_batch(util.scaleBatch(real_A:float(),100,100)), {win=opt.display_id, title=opt.name .. ' input'})
-                disp.image(util.deprocess_batch(util.scaleBatch(fake_B:float(),100,100)), {win=opt.display_id+1, title=opt.name .. ' output'})
-                disp.image(util.deprocess_batch(util.scaleBatch(real_B:float(),100,100)), {win=opt.display_id+2, title=opt.name .. ' target'})
+                disp.image(util.deprocess_batch(util.scaleBatch(real_A:float(),256,512)), {win=opt.display_id, title=opt.name .. ' input'})
+                disp.image(util.deprocess_batch(util.scaleBatch(fake_B:float(),256,512)), {win=opt.display_id+1, title=opt.name .. ' output'})
+                disp.image(util.deprocess_batch(util.scaleBatch(real_B:float(),256,512)), {win=opt.display_id+2, title=opt.name .. ' target'})
             end
         end
       
