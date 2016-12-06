@@ -13,7 +13,8 @@ opt = {
     DATA_ROOT = '',           -- path to images (should have subfolders 'train', 'val', etc)
     batchSize = 1,            -- # images in batch
     loadSize = 256,           -- scale images to this size
-    fineSize = 256,           --  then crop to this size
+    imgWidth = 720,           --  then crop to this size
+    imgHeight = 1280,
     flip=0,                   -- horizontal mirroring data augmentation
     display = 1,              -- display samples while training. 0 = false
     display_id = 200,         -- display window id.
@@ -69,8 +70,8 @@ else
 end
 ----------------------------------------------------------------------------
 
-local input = torch.FloatTensor(opt.batchSize,3,opt.fineSize,opt.fineSize)
-local target = torch.FloatTensor(opt.batchSize,3,opt.fineSize,opt.fineSize)
+local input = torch.FloatTensor(opt.batchSize,3,opt.imgWidth,opt.imgHeight)
+local target = torch.FloatTensor(opt.batchSize,3,opt.imgWidth,opt.imgHeight)
 
 print('checkpoints_dir', opt.checkpoints_dir)
 local netG = util.load(paths.concat(opt.checkpoints_dir, opt.netG_name .. '.t7'), opt)
