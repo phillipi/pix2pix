@@ -139,9 +139,9 @@ for n=1,math.floor(opt.how_many/opt.batchSize) do
     if opt.display then
       if opt.preprocess == 'regular' then
         disp = require 'display'
-        disp.image(util.scaleBatch(input,100,100),{win=opt.display_id, title='input'})
-        disp.image(util.scaleBatch(output,100,100),{win=opt.display_id+1, title='output'})
-        disp.image(util.scaleBatch(target,100,100),{win=opt.display_id+2, title='target'})
+        disp.image(util.scaleBatch(input,512,256),{win=opt.display_id, title='input'})
+        disp.image(util.scaleBatch(output,512,256),{win=opt.display_id+1, title='output'})
+        disp.image(util.scaleBatch(target,512,256),{win=opt.display_id+2, title='target'})
         
         print('Displayed images')
       end
