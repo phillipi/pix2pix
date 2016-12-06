@@ -33,12 +33,12 @@ local trainCache = paths.concat(cache, cache_prefix .. '_trainCache.t7')
 --------------------------------------------------------------------------------------------
 local input_nc = opt.input_nc -- input channels
 local output_nc = opt.output_nc
-local loadSize   = {input_nc, opt.loadSize}
-local sampleSize = {input_nc, opt.fineSize}
+local loadSize   = {input_nc, opt.imgWidth, opt.imgHeight}
+local sampleSize = {input_nc, opt.imgWidth, opt.imgHeight}
 
 local preprocessAandB = function(imA, imB)
-  imA = image.scale(imA, loadSize[2], loadSize[2])
-  imB = image.scale(imB, loadSize[2], loadSize[2])
+  imA = image.scale(imA, loadSize[2], loadSize[3])
+  imB = image.scale(imB, loadSize[2], loadSize[3])
   local perm = torch.LongTensor{3, 2, 1}
   imA = imA:index(1, perm)--:mul(256.0): brg, rgb
   imA = imA:mul(2):add(-1)
@@ -52,7 +52,7 @@ local preprocessAandB = function(imA, imB)
  
   
   local oW = sampleSize[2]
-  local oH = sampleSize[2]
+  local oH = sampleSize[3]
   local iH = imA:size(2)
   local iW = imA:size(3)
   
@@ -80,10 +80,10 @@ end
 
 local function loadImageChannel(path)
     local input = image.load(path, 3, 'float')
-    input = image.scale(input, loadSize[2], loadSize[2])
+    input = image.scale(input, loadSize[2], loadSize[3])
 
     local oW = sampleSize[2]
-    local oH = sampleSize[2]
+    local oH = sampleSize[3]
     local iH = input:size(2)
     local iW = input:size(3)
     
@@ -161,7 +161,7 @@ print('trainCache', trainCache)
 --   trainLoader = torch.load(trainCache)
 --   trainLoader.sampleHookTrain = trainHook
 --   trainLoader.loadSize = {input_nc, opt.loadSize, opt.loadSize}
---   trainLoader.sampleSize = {input_nc+output_nc, sampleSize[2], sampleSize[2]}
+--   trainLoader.sampleSize = {input_nc+output_nc, sampleSize[2], sampleSize[3]}
 --   trainLoader.serial_batches = opt.serial_batches
 --   trainLoader.split = 100
 --else
@@ -170,8 +170,8 @@ print('Creating train metadata')
 print('serial batch:, ', opt.serial_batches)
 trainLoader = dataLoader{
     paths = {opt.data},
-    loadSize = {input_nc, loadSize[2], loadSize[2]},
-    sampleSize = {input_nc+output_nc, sampleSize[2], sampleSize[2]},
+    loadSize = {input_nc, loadSize[2], loadSize[3]},
+    sampleSize = {input_nc+output_nc, sampleSize[2], sampleSize[3]},
     split = 100,
     serial_batches = opt.serial_batches, 
     verbose = true
