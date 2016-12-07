@@ -118,7 +118,7 @@ This will combine each pair of images (A,B) into a single image file, ready for 
 No need to run `combine_A_and_B.py` for colorization. Instead, you just need to prepare some natural images, and set `preprocess=colorization` in the script. The program will automatically convert each RGB image into Lab color space, and create  `L -> ab` image pair during the training.
 
 ### Extracting Edges
-We provide python and Matlab scripts to extract coarse edges from photos. Run `scripts/batch_hed.py` to compute [HED](https://github.com/s9xie/hed) edges. Run `scripts/PostprocessHED.m` to simplify edges with additional post-processing steps. Check the code documentation for more details. 
+We provide python and Matlab scripts to extract coarse edges from photos. Run `scripts/edges/batch_hed.py` to compute [HED](https://github.com/s9xie/hed) edges. Run `scripts/edges/PostprocessHED.m` to simplify edges with additional post-processing steps. Check the code documentation for more details. 
 
 ## Display UI
 Optionally, for displaying images during training and test, use the [display package](https://github.com/szym/display).

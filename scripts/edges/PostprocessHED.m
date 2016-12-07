@@ -1,6 +1,6 @@
 %%% Prerequisites
-% You need to get the cpp file edgesNmsMex.cpp from https://github.com/pdollar/edges/blob/master/private/edgesNmsMex.cpp
-% and compile it: mex edgesNmsMex.cpp
+% You need to get the cpp file edgesNmsMex.cpp from https://raw.githubusercontent.com/pdollar/edges/master/private/edgesNmsMex.cpp
+% and compile it in Matlab: mex edgesNmsMex.cpp
 % You also need to download and install Piotr's Computer Vision Matlab Toolbox:  https://pdollar.github.io/toolbox/
 
 %%% parameters
