@@ -13,7 +13,8 @@ opt = {
     DATA_ROOT = '',           -- path to images (should have subfolders 'train', 'val', etc)
     batchSize = 1,            -- # images in batch
     loadSize = 256,           -- scale images to this size
-    fineSize = 256,           --  then crop to this size
+    imgWidth = 256,           -- then crop to this size. Both should be  multiples of 32...
+    imgHeight = 512,
     flip=0,                   -- horizontal mirroring data augmentation
     display = 1,              -- display samples while training. 0 = false
     display_id = 200,         -- display window id.
@@ -69,8 +70,8 @@ else
 end
 ----------------------------------------------------------------------------
 
-local input = torch.FloatTensor(opt.batchSize,3,opt.fineSize,opt.fineSize)
-local target = torch.FloatTensor(opt.batchSize,3,opt.fineSize,opt.fineSize)
+local input = torch.FloatTensor(opt.batchSize,3,opt.imgHeight,opt.imgWidth)
+local target = torch.FloatTensor(opt.batchSize,3,opt.imgHeight,opt.imgWidth)
 
 print('checkpoints_dir', opt.checkpoints_dir)
 local netG = util.load(paths.concat(opt.checkpoints_dir, opt.netG_name .. '.t7'), opt)
@@ -129,18 +130,18 @@ for n=1,math.floor(opt.how_many/opt.batchSize) do
     print(output:size())
     print(target:size())
     for i=1, opt.batchSize do
-        image.save(paths.concat(image_dir,'input',filepaths_curr[i]), image.scale(input[i],input[i]:size(2),input[i]:size(3)/opt.aspect_ratio))
-        image.save(paths.concat(image_dir,'output',filepaths_curr[i]), image.scale(output[i],output[i]:size(2),output[i]:size(3)/opt.aspect_ratio))
-        image.save(paths.concat(image_dir,'target',filepaths_curr[i]), image.scale(target[i],target[i]:size(2),target[i]:size(3)/opt.aspect_ratio))
+        image.save(paths.concat(image_dir,'input',filepaths_curr[i]), input[i])--image.scale(input[i],input[i]:size(3),input[i]:size(2))) --/opt.aspect_ratio))
+        image.save(paths.concat(image_dir,'output',filepaths_curr[i]), output[i])--image.scale(output[i],output[i]:size(3),output[i]:size(2)))--/opt.aspect_ratio))
+        image.save(paths.concat(image_dir,'target',filepaths_curr[i]), target[i])--image.scale(target[i],target[i]:size(3),target[i]:size(2)))--/opt.aspect_ratio))
     end
     print('Saved images to: ', image_dir)
     
     if opt.display then
       if opt.preprocess == 'regular' then
         disp = require 'display'
-        disp.image(util.scaleBatch(input,100,100),{win=opt.display_id, title='input'})
-        disp.image(util.scaleBatch(output,100,100),{win=opt.display_id+1, title='output'})
-        disp.image(util.scaleBatch(target,100,100),{win=opt.display_id+2, title='target'})
+        disp.image(util.scaleBatch(input,512,256),{win=opt.display_id, title='input'})
+        disp.image(util.scaleBatch(output,512,256),{win=opt.display_id+1, title='output'})
+        disp.image(util.scaleBatch(target,512,256),{win=opt.display_id+2, title='target'})
         
         print('Displayed images')
       end

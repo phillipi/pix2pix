@@ -15,7 +15,8 @@ opt = {
    DATA_ROOT = '',         -- path to images (should have subfolders 'train', 'val', etc)
    batchSize = 1,          -- # images in batch
    loadSize = 286,         -- scale images to this size
-   fineSize = 256,         --  then crop to this size
+   imgWidth = 256,         --  then crop to this size. Both should be multiples of 32...
+   imgHeight = 512,
    ngf = 64,               -- #  of gen filters in first conv layer
    ndf = 64,               -- #  of discrim filters in first conv layer
    input_nc = 3,           -- #  of input image channels
@@ -27,6 +28,7 @@ opt = {
    flip = 1,               -- if flip the images for data argumentation
    display = 1,            -- display samples while training. 0 = false
    display_id = 10,        -- display window id.
+   display_plot = 'errL1',    -- which loss values to plot over time. Accepted values include a comma seperated list of: errL1, errG, and errD
    gpu = 1,                -- gpu = 0 is CPU mode. gpu=X is GPU mode on GPU X
    name = '',              -- name of the experiment, should generally be passed on the command line
    which_direction = 'AtoB',    -- AtoB or BtoA
@@ -36,7 +38,7 @@ opt = {
    save_epoch_freq = 50,        -- save a model every save_epoch_freq epochs (does not overwrite previously saved models)
    save_latest_freq = 5000,     -- save the latest model every latest_freq sgd iterations (overwrites the previous latest model)
    print_freq = 50,             -- print the debug information every print_freq iterations
-   display_freq = 100,          -- display the current results every display_freq iterations
+   display_freq = 20,           -- display the current results every display_freq iterations
    save_display_freq = 5000,    -- save the current display of results every save_display_freq_iterations
    continue_train=0,            -- if continue training, load the latest model: 1: true, 0: false
    serial_batches = 0,          -- if 1, takes images in order to make batches, otherwise takes them randomly
@@ -165,11 +167,11 @@ optimStateD = {
    beta1 = opt.beta1,
 }
 ----------------------------------------------------------------------------
-local real_A = torch.Tensor(opt.batchSize, input_nc, opt.fineSize, opt.fineSize)
-local real_B = torch.Tensor(opt.batchSize, output_nc, opt.fineSize, opt.fineSize)
-local fake_B = torch.Tensor(opt.batchSize, output_nc, opt.fineSize, opt.fineSize)
-local real_AB = torch.Tensor(opt.batchSize, output_nc + input_nc*opt.condition_GAN, opt.fineSize, opt.fineSize)
-local fake_AB = torch.Tensor(opt.batchSize, output_nc + input_nc*opt.condition_GAN, opt.fineSize, opt.fineSize)
+local real_A = torch.Tensor(opt.batchSize, input_nc, opt.imgWidth, opt.imgHeight)
+local real_B = torch.Tensor(opt.batchSize, output_nc, opt.imgWidth, opt.imgHeight)
+local fake_B = torch.Tensor(opt.batchSize, output_nc, opt.imgWidth, opt.imgHeight)
+local real_AB = torch.Tensor(opt.batchSize, output_nc + input_nc*opt.condition_GAN, opt.imgWidth, opt.imgHeight)
+local fake_AB = torch.Tensor(opt.batchSize, output_nc + input_nc*opt.condition_GAN, opt.imgWidth, opt.imgHeight)
 local errD, errG, errL1 = 0, 0, 0
 local epoch_tm = torch.Timer()
 local tm = torch.Timer()
@@ -314,6 +316,25 @@ file = torch.DiskFile(paths.concat(opt.checkpoints_dir, opt.name, 'opt.txt'), 'w
 file:writeObject(opt)
 file:close()
 
+-- parse diplay_plot string into table
+opt.display_plot = string.split(string.gsub(opt.display_plot, "%s+", ""), ",")
+for k, v in ipairs(opt.display_plot) do
+    if not util.containsValue({"errG", "errD", "errL1"}, v) then 
+        error(string.format('bad display_plot value "%s"', v)) 
+    end
+end
+
+-- display plot config
+local plot_config = {
+  title = "Loss over time",
+  labels = {"epoch", unpack(opt.display_plot)},
+  ylabel = "loss",
+}
+
+-- display plot vars
+local plot_data = {}
+local plot_win
+
 local counter = 0
 for epoch = 1, opt.niter do
     epoch_tm:reset()
@@ -328,22 +349,22 @@ for epoch = 1, opt.niter do
         
         -- (2) Update G network: maximize log(D(x,G(x))) + L1(y,G(x))
         optim.adam(fGx, parametersG, optimStateG)
-        
+
         -- display
         counter = counter + 1
         if counter % opt.display_freq == 0 and opt.display then
             createRealFake()
             if opt.preprocess == 'colorization' then 
-                local real_A_s = util.scaleBatch(real_A:float(),100,100)
-                local fake_B_s = util.scaleBatch(fake_B:float(),100,100)
-                local real_B_s = util.scaleBatch(real_B:float(),100,100)
+                local real_A_s = util.scaleBatch(real_A:float(),512,256)
+                local fake_B_s = util.scaleBatch(fake_B:float(),512,256)
+                local real_B_s = util.scaleBatch(real_B:float(),512,256)
                 disp.image(util.deprocessL_batch(real_A_s), {win=opt.display_id, title=opt.name .. ' input'})
                 disp.image(util.deprocessLAB_batch(real_A_s, fake_B_s), {win=opt.display_id+1, title=opt.name .. ' output'})
                 disp.image(util.deprocessLAB_batch(real_A_s, real_B_s), {win=opt.display_id+2, title=opt.name .. ' target'})
             else
-                disp.image(util.deprocess_batch(util.scaleBatch(real_A:float(),100,100)), {win=opt.display_id, title=opt.name .. ' input'})
-                disp.image(util.deprocess_batch(util.scaleBatch(fake_B:float(),100,100)), {win=opt.display_id+1, title=opt.name .. ' output'})
-                disp.image(util.deprocess_batch(util.scaleBatch(real_B:float(),100,100)), {win=opt.display_id+2, title=opt.name .. ' target'})
+                disp.image(util.deprocess_batch(util.scaleBatch(real_A:float(),512,256)), {win=opt.display_id, title=opt.name .. ' input'})
+                disp.image(util.deprocess_batch(util.scaleBatch(fake_B:float(),512,256)), {win=opt.display_id+1, title=opt.name .. ' output'})
+                disp.image(util.deprocess_batch(util.scaleBatch(real_B:float(),512,256)), {win=opt.display_id+2, title=opt.name .. ' target'})
             end
         end
       
@@ -377,14 +398,30 @@ for epoch = 1, opt.niter do
             opt.serial_batches=serial_batches
         end
         
-        -- logging
+        -- logging and display plot
         if counter % opt.print_freq == 0 then
+            local loss = {errG=errG and errG or -1, errD=errD and errD or -1, errL1=errL1 and errL1 or -1}
+            local curItInBatch = ((i-1) / opt.batchSize)
+            local totalItInBatch = math.floor(math.min(data:size(), opt.ntrain) / opt.batchSize)
             print(('Epoch: [%d][%8d / %8d]\t Time: %.3f  DataTime: %.3f  '
                     .. '  Err_G: %.4f  Err_D: %.4f  ErrL1: %.4f'):format(
-                     epoch, ((i-1) / opt.batchSize),
-                     math.floor(math.min(data:size(), opt.ntrain) / opt.batchSize),
+                     epoch, curItInBatch, totalItInBatch,
                      tm:time().real / opt.batchSize, data_tm:time().real / opt.batchSize,
-                     errG and errG or -1, errD and errD or -1, errL1 and errL1 or -1))
+                     errG, errD, errL1))
+           
+            local plot_vals = { epoch + curItInBatch / totalItInBatch }
+            for k, v in ipairs(opt.display_plot) do
+              if loss[v] ~= nil then
+               plot_vals[#plot_vals + 1] = loss[v] 
+             end
+            end
+
+            -- update display plot
+            if opt.display then
+              table.insert(plot_data, plot_vals)
+              plot_config.win = plot_win
+              plot_win = disp.plot(plot_data, plot_config)
+            end
         end
         
         -- save latest model
