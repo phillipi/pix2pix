@@ -109,13 +109,16 @@ Corresponding images in a pair {A,B} must be the same size and have the same fil
 
 Once the data is formatted this way, call:
 ```bash
-python data/combine_A_and_B.py --fold_A /path/to/data/A --fold_B /path/to/data/B --fold_AB /path/to/data
+python scripts/combine_A_and_B.py --fold_A /path/to/data/A --fold_B /path/to/data/B --fold_AB /path/to/data
 ```
 
 This will combine each pair of images (A,B) into a single image file, ready for training.
 
 ### Notes on Colorization
-No need to run `combine_A_and_B.py` for colorization. Instead, you just need to prepare some natural images, and set `preprocess=colorization` in the script. The program will automatically convert each RGB image into Lab color space, and create  `L -> ab` image pair during the training. 
+No need to run `combine_A_and_B.py` for colorization. Instead, you just need to prepare some natural images, and set `preprocess=colorization` in the script. The program will automatically convert each RGB image into Lab color space, and create  `L -> ab` image pair during the training.
+
+### Extracting Edges
+We provide python and Matlab scripts to extract coarse edges from photos. Run `scripts/batch_hed.py` to compute [HED](https://github.com/s9xie/hed) edges. Run `scripts/PostprocessHED.m` to simplify edges with additional post-processing steps. Check the code documentation for more details. 
 
 ## Display UI
 Optionally, for displaying images during training and test, use the [display package](https://github.com/szym/display).
