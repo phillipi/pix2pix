@@ -34,7 +34,7 @@ function defineG_encoder_decoder(input_nc, output_nc, ngf, nz)
     -- input is (ngf * 2) x 64 x 64
     d7 = d6 - nn.ReLU(true) - nn.SpatialFullConvolution(ngf * 2, ngf, 4, 4, 2, 2, 1, 1) - nn.SpatialBatchNormalization(ngf)
     -- input is (ngf) x128 x 128
-    d8 = d7 - nn.ReLU(true) - nn.SpatialFullConvolution(ngf * 2, output_nc, 4, 4, 2, 2, 1, 1)
+    d8 = d7 - nn.ReLU(true) - nn.SpatialFullConvolution(ngf, output_nc, 4, 4, 2, 2, 1, 1)
     -- input is (nc) x 256 x 256
     
     o1 = d8 - nn.Tanh()
