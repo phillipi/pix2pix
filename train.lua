@@ -143,7 +143,7 @@ if opt.continue_train == 1 then
    netD = util.load(paths.concat(opt.checkpoints_dir, opt.name, 'latest_net_D.t7'), opt)
 else
   print('define model netG...')
-  netG = defineG(input_nc, output_nc, ngf, nz)
+  netG = defineG(input_nc, output_nc, ngf)
   print('define model netD...')
   netD = defineD(input_nc, output_nc, ndf)
 end
