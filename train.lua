@@ -98,26 +98,25 @@ local function weights_init(m)
    end
 end
 
-local nz = opt.nz
+
 local ndf = opt.ndf
 local ngf = opt.ngf
 local real_label = 1
 local fake_label = 0
 
-function defineG(input_nc, output_nc, ngf, nz)
-   
-    if     opt.which_model_netG == "encoder_decoder" then netG = defineG_encoder_decoder(input_nc, output_nc, ngf, nz, 3)
+function defineG(input_nc, output_nc, ngf)
+    local netG = nil
+    if     opt.which_model_netG == "encoder_decoder" then netG = defineG_encoder_decoder(input_nc, output_nc, ngf)
     elseif opt.which_model_netG == "unet" then netG = defineG_unet(input_nc, output_nc, ngf)
     else error("unsupported netG model")
     end
    
-   netG:apply(weights_init)
-   
-   return netG
+    netG:apply(weights_init)
+  
+    return netG
 end
 
 function defineD(input_nc, output_nc, ndf)
-    
     local netD = nil
     if opt.condition_GAN==1 then
         input_nc_tmp = input_nc
