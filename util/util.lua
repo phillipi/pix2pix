@@ -190,9 +190,12 @@ function util.load(filename, opt)
 	if opt.cudnn>0 then
 		require 'cudnn'
 	end
+  
+  if opt.gpu > 0 then 
+    require 'cunn'
+  end
 	local net = torch.load(filename)
 	if opt.gpu > 0 then
-		require 'cunn'
 		net:cuda()
 		
 		-- calling cuda on cudnn saved nngraphs doesn't change all variables to cuda, so do it below

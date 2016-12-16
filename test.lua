@@ -125,9 +125,9 @@ for n=1,math.floor(opt.how_many/opt.batchSize) do
     paths.mkdir(paths.concat(image_dir,'input'))
     paths.mkdir(paths.concat(image_dir,'output'))
     paths.mkdir(paths.concat(image_dir,'target'))
-    print(input:size())
-    print(output:size())
-    print(target:size())
+    -- print(input:size())
+    -- print(output:size())
+    -- print(target:size())
     for i=1, opt.batchSize do
         image.save(paths.concat(image_dir,'input',filepaths_curr[i]), image.scale(input[i],input[i]:size(2),input[i]:size(3)/opt.aspect_ratio))
         image.save(paths.concat(image_dir,'output',filepaths_curr[i]), image.scale(output[i],output[i]:size(2),output[i]:size(3)/opt.aspect_ratio))
