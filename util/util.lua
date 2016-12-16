@@ -17,17 +17,17 @@ function util.normalize(img)
 end
 
 function util.normalizeBatch(batch)
-	for i = 1, batch:size(1) do
-		batch[i] = util.normalize(batch[i]:squeeze())
-	end
-	return batch
+  for i = 1, batch:size(1) do
+    batch[i] = util.normalize(batch[i]:squeeze())
+  end
+  return batch
 end
 
 function util.basename_batch(batch)
-	for i = 1, #batch do
-		batch[i] = paths.basename(batch[i])
-	end
-	return batch
+  for i = 1, #batch do
+    batch[i] = paths.basename(batch[i])
+  end
+  return batch
 end
 
 
@@ -53,7 +53,6 @@ end
 
 -- Undo the above preprocessing.
 function util.deprocess(img)
-    
     -- BGR to RGB
     local perm = torch.LongTensor{3, 2, 1}
     img = img:index(1, perm)
@@ -66,17 +65,17 @@ function util.deprocess(img)
 end
 
 function util.preprocess_batch(batch)
-	for i = 1, batch:size(1) do
-		batch[i] = util.preprocess(batch[i]:squeeze())
-	end
-	return batch
+  for i = 1, batch:size(1) do
+    batch[i] = util.preprocess(batch[i]:squeeze())
+  end
+  return batch
 end
 
 function util.deprocess_batch(batch)
-	for i = 1, batch:size(1) do
-		batch[i] = util.deprocess(batch[i]:squeeze())
-	end
-	return batch
+  for i = 1, batch:size(1) do
+   batch[i] = util.deprocess(batch[i]:squeeze())
+  end
+return batch
 end
 
 
@@ -134,11 +133,11 @@ end
 
 
 function util.scaleBatch(batch,s1,s2)
-	local scaled_batch = torch.Tensor(batch:size(1),batch:size(2),s1,s2)
-	for i = 1, batch:size(1) do
-		scaled_batch[i] = image.scale(batch[i],s1,s2):squeeze()
-	end
-	return scaled_batch
+  local scaled_batch = torch.Tensor(batch:size(1),batch:size(2),s1,s2)
+  for i = 1, batch:size(1) do
+   scaled_batch[i] = image.scale(batch[i],s1,s2):squeeze()
+  end
+  return scaled_batch
 end
 
 
@@ -153,10 +152,9 @@ end
 
 
 function util.scaleImage(input, loadSize)
-    
     -- replicate bw images to 3 channels
     if input:size(1)==1 then
-    	input = torch.repeatTensor(input,3,1,1)
+      input = torch.repeatTensor(input,3,1,1)
     end
     
     input = image.scale(input, loadSize, loadSize)
@@ -165,16 +163,14 @@ function util.scaleImage(input, loadSize)
 end
 
 function util.getAspectRatio(path)
-	local input = image.load(path, 3, 'float')
-	local ar = input:size(3)/input:size(2)
-	return ar
+  local input = image.load(path, 3, 'float')
+  local ar = input:size(3)/input:size(2)
+  return ar
 end
 
 function util.loadImage(path, loadSize, nc)
-
     local input = image.load(path, 3, 'float')
-    
-   input= util.preprocess(util.scaleImage(input, loadSize))
+    input= util.preprocess(util.scaleImage(input, loadSize))
     
     if nc == 1 then
         input = input[{{1}, {}, {}}]
@@ -187,39 +183,40 @@ end
 
 -- TO DO: loading code is rather hacky; clean it up and make sure it works on all types of nets / cpu/gpu configurations
 function util.load(filename, opt)
-	if opt.cudnn>0 then
-		require 'cudnn'
-	end
+  if opt.cudnn>0 then
+    require 'cudnn'
+  end
   
   if opt.gpu > 0 then 
     require 'cunn'
   end
-	local net = torch.load(filename)
-	if opt.gpu > 0 then
-		net:cuda()
-		
-		-- calling cuda on cudnn saved nngraphs doesn't change all variables to cuda, so do it below
-		if net.forwardnodes then
-			for i=1,#net.forwardnodes do
-				if net.forwardnodes[i].data.module then
-					net.forwardnodes[i].data.module:cuda()
-				end
-			end
-		end
-		
-	else
-		net:float()
-	end
-	net:apply(function(m) if m.weight then 
-	    m.gradWeight = m.weight:clone():zero(); 
-	    m.gradBias = m.bias:clone():zero(); end end)
-	return net
+  
+  local net = torch.load(filename)
+
+  if opt.gpu > 0 then
+  	net:cuda()
+
+    -- calling cuda on cudnn saved nngraphs doesn't change all variables to cuda, so do it below
+    if net.forwardnodes then
+      for i=1,#net.forwardnodes do
+          if net.forwardnodes[i].data.module then
+            net.forwardnodes[i].data.module:cuda()
+          end
+      end
+    end
+  else
+    net:float()
+  end
+  net:apply(function(m) if m.weight then 
+  m.gradWeight = m.weight:clone():zero(); 
+  m.gradBias = m.bias:clone():zero(); end end)
+  return net
 end
 
 function util.cudnn(net)
-	require 'cudnn'
-	require 'util/cudnn_convert_custom'
-	return cudnn_convert_custom(net, cudnn)
+  require 'cudnn'
+  require 'util/cudnn_convert_custom'
+  return cudnn_convert_custom(net, cudnn)
 end
 
 return util
