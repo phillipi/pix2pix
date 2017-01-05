@@ -87,7 +87,7 @@ bash ./datasets/download_dataset.sh dataset_name
 - `edges2handbags`: 137K Amazon Handbag images from [iGAN project](https://github.com/junyanz/iGAN). Edges are computed by [HED](https://github.com/s9xie/hed) edge detector + post-processing.
 
 ## Models
-Download the pre-trained modes using the following script:
+Download the pre-trained models with the following script. You need to rename the model (e.g. `facdades_label2image` to `/facades/latest_net_G.t7`) after the download has finished. 
 ```bash
 bash ./models/download_model.sh model_name
 ```
