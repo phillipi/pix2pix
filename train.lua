@@ -108,6 +108,7 @@ function defineG(input_nc, output_nc, ngf)
     local netG = nil
     if     opt.which_model_netG == "encoder_decoder" then netG = defineG_encoder_decoder(input_nc, output_nc, ngf)
     elseif opt.which_model_netG == "unet" then netG = defineG_unet(input_nc, output_nc, ngf)
+    elseif opt.which_model_netG == "unet_128" then netG = defineG_unet_128(input_nc, output_nc, ngf)
     else error("unsupported netG model")
     end
    
@@ -354,8 +355,9 @@ for epoch = 1, opt.niter do
             opt.serial_batch_iter=1
             
             local image_out = nil
-            local N_save_display = 10
-            for i3=1, torch.floor(N_save_display/opt.batchSize) do
+            local N_save_display = 10 
+            local N_save_iter = torch.max(torch.Tensor({1, torch.floor(N_save_display/opt.batchSize)}))
+            for i3=1, N_save_iter do
             
                 createRealFake()
                 print('save to the disk')
