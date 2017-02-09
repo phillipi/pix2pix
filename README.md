@@ -91,13 +91,14 @@ Download the pre-trained models with the following script. You need to rename th
 ```bash
 bash ./models/download_model.sh model_name
 ```
-- `facades_label2image` (labels -> facades): trained on the CMP Facades dataset.
-- `cityscapes_label2image` (labels -> street scene): trained on the Cityscapes dataset.
-- `cityscapes_image2label` (street scene -> labels): trained on the Cityscapes dataset.
+- `facades_label2image` (label -> facade): trained on the CMP Facades dataset.
+- `cityscapes_label2image` (label -> street scene): trained on the Cityscapes dataset.
+- `cityscapes_image2label` (street scene -> label): trained on the Cityscapes dataset.
 - `map2sat` (map -> aerial photo): trained on Google maps.
 - `sat2map` (aerial photo -> map): trained on Google maps.
-- `edges2shoes` (edges -> photos): trained on UT Zappos50K dataset.
-- `edges2handbags` (edges -> photos): train on Amazon handbags images.
+- `edges2shoes` (edge -> photo): trained on UT Zappos50K dataset.
+- `edges2handbags` (edge -> photo): train on Amazon handbags images.
+- `day2night` (daytime scene -> nighttime scene): trained on around 100 [webcams](http://transattr.cs.brown.edu/). 
 
 ## Setup Training and Test data
 ### Generating Pairs
