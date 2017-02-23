@@ -225,8 +225,6 @@ function createRealFake()
     else
         fake_AB = fake_B -- unconditional GAN, only penalizes structure in B
     end
-    local predict_real = netD:forward(real_AB)
-    local predict_fake = netD:forward(fake_AB)
 end
 
 -- create closure to evaluate f(X) and df/dX of discriminator
