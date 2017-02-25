@@ -148,5 +148,9 @@ If you use this code for your research, please cite our paper <a href="https://a
 }
 ```
 
+## Cat Paper Collection
+If you love cats, and love reading cool graphics, vision, and learning papers, please check out the Cat Paper Collection:  
+[[Github]](https://github.com/junyanz/CatPapers) [[Webpage]](http://people.eecs.berkeley.edu/~junyanz/cat/cat_papers.html)
+
 ## Acknowledgments
 Code borrows heavily from [DCGAN](https://github.com/soumith/dcgan.torch). The data loader is modified from [DCGAN](https://github.com/soumith/dcgan.torch) and  [Context-Encoder](https://github.com/pathak22/context-encoder).
