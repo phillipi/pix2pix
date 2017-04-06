@@ -99,7 +99,7 @@ bash ./models/download_model.sh model_name
 - `map2sat` (map -> aerial photo): trained on Google maps.
 - `sat2map` (aerial photo -> map): trained on Google maps.
 - `edges2shoes` (edge -> photo): trained on UT Zappos50K dataset.
-- `edges2handbags` (edge -> photo): train on Amazon handbags images.
+- `edges2handbag` (edge -> photo): train on Amazon handbags images.
 - `day2night` (daytime scene -> nighttime scene): trained on around 100 [webcams](http://transattr.cs.brown.edu/). 
 
 ## Setup Training and Test data
