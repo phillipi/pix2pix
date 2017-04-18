@@ -1,6 +1,7 @@
 
 # pix2pix
 [[Project]](https://phillipi.github.io/pix2pix/)   [[Arxiv]](https://arxiv.org/pdf/1611.07004v1.pdf)
+[[PyTorch]](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
 
 Torch implementation for learning a mapping from input images to output images, for example:
 
@@ -12,7 +13,7 @@ Image-to-Image Translation Using Conditional Adversarial Networks
 
 On some tasks, decent results can be obtained fairly quickly and on small datasets. For example, to learn to generate facades (example shown above), we trained on just 400 images for about 2 hours (on a single Pascal Titan X GPU). However, for harder problems it may be important to train on far larger datasets, and for many hours or even days.
 
-Check out our latest project [CycleGAN](https://github.com/junyanz/CycleGAN) for learning a pix2pix model without input-output pairs.  
+Check out our [[PyTorch]](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) implementation. Also see our latest project [CycleGAN](https://github.com/junyanz/CycleGAN) for learning a pix2pix model **without** input-output pairs. 
 
 ## Setup
 
@@ -89,7 +90,7 @@ bash ./datasets/download_dataset.sh dataset_name
 - `edges2handbags`: 137K Amazon Handbag images from [iGAN project](https://github.com/junyanz/iGAN). Edges are computed by [HED](https://github.com/s9xie/hed) edge detector + post-processing.
 
 ## Models
-Download the pre-trained models with the following script. You need to rename the model (e.g. `facades_label2image` to `/checkpoints/facades/latest_net_G.t7`) after the download has finished. 
+Download the pre-trained models with the following script. You need to rename the model (e.g. `facades_label2image` to `/checkpoints/facades/latest_net_G.t7`) after the download has finished.
 ```bash
 bash ./models/download_model.sh model_name
 ```
@@ -100,7 +101,7 @@ bash ./models/download_model.sh model_name
 - `sat2map` (aerial photo -> map): trained on Google maps.
 - `edges2shoes` (edge -> photo): trained on UT Zappos50K dataset.
 - `edges2handbags` (edge -> photo): train on Amazon handbags images.
-- `day2night` (daytime scene -> nighttime scene): trained on around 100 [webcams](http://transattr.cs.brown.edu/). 
+- `day2night` (daytime scene -> nighttime scene): trained on around 100 [webcams](http://transattr.cs.brown.edu/).
 
 ## Setup Training and Test data
 ### Generating Pairs
@@ -121,7 +122,7 @@ This will combine each pair of images (A,B) into a single image file, ready for 
 No need to run `combine_A_and_B.py` for colorization. Instead, you just need to prepare some natural images, and set `preprocess=colorization` in the script. The program will automatically convert each RGB image into Lab color space, and create  `L -> ab` image pair during the training.
 
 ### Extracting Edges
-We provide python and Matlab scripts to extract coarse edges from photos. Run `scripts/edges/batch_hed.py` to compute [HED](https://github.com/s9xie/hed) edges. Run `scripts/edges/PostprocessHED.m` to simplify edges with additional post-processing steps. Check the code documentation for more details. 
+We provide python and Matlab scripts to extract coarse edges from photos. Run `scripts/edges/batch_hed.py` to compute [HED](https://github.com/s9xie/hed) edges. Run `scripts/edges/PostprocessHED.m` to simplify edges with additional post-processing steps. Check the code documentation for more details.
 
 ## Display UI
 Optionally, for displaying images during training and test, use the [display package](https://github.com/szym/display).
