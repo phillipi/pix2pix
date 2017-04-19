@@ -19,7 +19,7 @@ opt = {
     display_id = 200,         -- display window id.
     gpu = 1,                  -- gpu = 0 is CPU mode. gpu=X is GPU mode on GPU X
     how_many = 'all',         -- how many test images to run (set to all to run on every image found in the data/phase folder)
-    which_direction = 'BtoA', -- AtoB or BtoA
+    which_direction = 'AtoB', -- AtoB or BtoA
     phase = 'val',            -- train, val, test ,etc
     preprocess = 'regular',   -- for special purpose preprocessing, e.g., for colorization, change this (selects preprocessing functions in util.lua)
     aspect_ratio = 1.0,       -- aspect ratio of result images
