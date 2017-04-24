@@ -55,7 +55,7 @@ def main():
             scipy.misc.imsave(output_image_dir + '/' + str(i) + '_input.jpg', im)
 
     mean_pixel_acc, mean_class_acc, mean_class_iou, per_class_acc, per_class_iou = get_scores(hist_perframe)
-    with open(args.output_dir + 'evaluation_results.txt', 'w') as f:
+    with open(args.output_dir + '/evaluation_results.txt', 'w') as f:
         f.write('Mean pixel accuracy: %f\n' % mean_pixel_acc)
         f.write('Mean class accuracy: %f\n' % mean_class_acc)
         f.write('Mean class IoU: %f\n' % mean_class_iou)
