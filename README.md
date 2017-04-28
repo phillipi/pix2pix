@@ -22,12 +22,21 @@ Check out our [[PyTorch]](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pi
 - NVIDIA GPU + CUDA CuDNN (CPU mode and CUDA without CuDNN may work with minimal modification, but untested)
 
 ### Getting Started
+#### Dependencies 
 - Install torch and dependencies from https://github.com/torch/distro
 - Install torch packages `nngraph` and `display`
 ```bash
 luarocks install nngraph
 luarocks install https://raw.githubusercontent.com/szym/display/master/display-scm-0.rockspec
 ```
+- Mac Users Only (with homebrew installed, for the image preprocessing with linux tools)
+```bash
+brew install coreutils # for gwc
+brew install findutils # for gfind
+```
+
+#### Main Project
+
 - Clone this repo:
 ```bash
 git clone git@github.com:phillipi/pix2pix.git
