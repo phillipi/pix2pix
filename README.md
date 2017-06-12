@@ -13,7 +13,7 @@ Image-to-Image Translation with Conditional Adversarial Networks
 
 On some tasks, decent results can be obtained fairly quickly and on small datasets. For example, to learn to generate facades (example shown above), we trained on just 400 images for about 2 hours (on a single Pascal Titan X GPU). However, for harder problems it may be important to train on far larger datasets, and for many hours or even days.
 
-Check out our [[PyTorch]](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) implementation. Also see our latest project [CycleGAN](https://github.com/junyanz/CycleGAN) for learning a pix2pix model **without** input-output pairs. 
+Check out our [[PyTorch]](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) implementation. Also see our latest project [CycleGAN](https://github.com/junyanz/CycleGAN) for learning a pix2pix model **without** input-output pairs.
 
 ## Setup
 
@@ -79,15 +79,16 @@ See `opt` in test.lua for additional testing options.
 
 
 ## Datasets
-Download the datasets using the following script:
+Download the datasets using the following script. Some of the datasets are collected by other researchers. Please cite their papers if you use the data.
 ```bash
 bash ./datasets/download_dataset.sh dataset_name
 ```
-- `facades`: 400 images from [CMP Facades dataset](http://cmp.felk.cvut.cz/~tylecr1/facade/).
-- `cityscapes`: 2975 images from the [Cityscapes training set](https://www.cityscapes-dataset.com/).
+- `facades`: 400 images from [CMP Facades dataset](http://cmp.felk.cvut.cz/~tylecr1/facade/). [[Citation](datasets/bibtex/facades.tex)]
+- `cityscapes`: 2975 images from the [Cityscapes training set](https://www.cityscapes-dataset.com/).  [[Citation](datasets/bibtex/cityscapes.tex)]
 - `maps`: 1096 training images scraped from Google Maps
 - `edges2shoes`: 50k training images from [UT Zappos50K dataset](http://vision.cs.utexas.edu/projects/finegrained/utzap50k/). Edges are computed by [HED](https://github.com/s9xie/hed) edge detector + post-processing.
-- `edges2handbags`: 137K Amazon Handbag images from [iGAN project](https://github.com/junyanz/iGAN). Edges are computed by [HED](https://github.com/s9xie/hed) edge detector + post-processing.
+[[Citation](datasets/bibtex/shoes.tex)]
+- `edges2handbags`: 137K Amazon Handbag images from [iGAN project](https://github.com/junyanz/iGAN). Edges are computed by [HED](https://github.com/s9xie/hed) edge detector + post-processing. [[Citation](datasets/bibtex/iGAN.tex)]
 
 ## Models
 Download the pre-trained models with the following script. You need to rename the model (e.g. `facades_label2image` to `/checkpoints/facades/latest_net_G.t7`) after the download has finished.
