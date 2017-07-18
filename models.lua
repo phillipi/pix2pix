@@ -165,7 +165,7 @@ function defineD_pixelGAN(input_nc, output_nc, ndf)
     netD:add(nn.SpatialConvolution(ndf * 2, 1, 1, 1, 1, 1, 0, 0))
     -- state size: 1 x 256 x 256
     netD:add(nn.Sigmoid())
-    -- state size: 1 x 30 x 30
+    -- state size: 1 x 256 x 256
         
     return netD
 end
