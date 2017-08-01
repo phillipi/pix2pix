@@ -6,7 +6,7 @@
 #       python batch_hed.py --images_dir=/data/to/path/photos/ --hed_mat_dir=/data/to/path/hed_mat_files/
 # The code sometimes crashes after computation is done. Error looks like "Check failed: ... driver shutting down". You can just kill the job. 
 # For large images, it will produce gpu memory issue. Therefore, you better resize the images before running this script. 
-
+# Step 5: run the MATLAB post-processing script "PostprocessHED.m" 
 import numpy as np
 import scipy.misc
 import Image
