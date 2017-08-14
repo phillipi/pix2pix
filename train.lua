@@ -40,6 +40,7 @@ opt = {
    display_freq = 100,          -- display the current results every display_freq iterations
    save_display_freq = 5000,    -- save the current display of results every save_display_freq_iterations
    continue_train=0,            -- if continue training, load the latest model: 1: true, 0: false
+   precise_model_num = false,    -- if true, load the maximum number of saved models, else load the latest.
    serial_batches = 0,          -- if 1, takes images in order to make batches, otherwise takes them randomly
    serial_batch_iter = 1,       -- iter into serial image list
    checkpoints_dir = './checkpoints', -- models are saved here
@@ -140,12 +141,6 @@ end
 -- load saved models and finetune
 local start_epoch = 1
 if opt.continue_train == 1 then
-   print('loading previously trained netG...')
-   netG = util.load(paths.concat(opt.checkpoints_dir, opt.name, 'latest_net_G.t7'), opt)
-   print('loading previously trained netD...')
-   netD = util.load(paths.concat(opt.checkpoints_dir, opt.name, 'latest_net_D.t7'), opt)
-   local current_dir = paths.concat(opt.checkpoints_dir, opt.name)
-
    local current_dir = paths.concat(opt.checkpoints_dir, opt.name)
 
    local continue_txt = 'continue.txt'
@@ -155,7 +150,6 @@ if opt.continue_train == 1 then
 
    os.execute('cd '..current_dir..';'..'ls -d *.t7 | tee '..continue_txt)
    local file_continue = io.open(current_dir..'/'..continue_txt,'r')
-
    local latest_saved_num = 0
    for line in file_continue:lines() do
      local st, _ = string.find(line, '%d_net_G.t7')
@@ -172,6 +166,15 @@ if opt.continue_train == 1 then
    print('using the number of latest saved model approximate lastest model, it seems no better way...')
    print('Epoch starting at '..latest_saved_num)
    start_epoch = latest_saved_num
+
+   local load_model_prefix = tostring(latest_saved_num)
+   if opt.precise_model_num == false then
+        load_model_prefix = 'latest'
+   end
+   print('loading previously trained netG...')
+   netG = util.load(paths.concat(opt.checkpoints_dir, opt.name, load_model_prefix..'_net_G.t7'), opt)
+   print('loading previously trained netD...')
+   netD = util.load(paths.concat(opt.checkpoints_dir, opt.name, load_model_prefix..'_net_D.t7'), opt) 
 else
   print('define model netG...')
   netG = defineG(input_nc, output_nc, ngf)
