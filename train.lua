@@ -139,47 +139,54 @@ end
 
 
 -- load saved models and finetune
-local start_epoch = 1
+local start_epoch = 0
 if opt.continue_train == 1 then
    local current_dir = paths.concat(opt.checkpoints_dir, opt.name)
 
    local continue_txt = 'continue.txt'
    if io.open(continue_txt,'r') ~= nil then
-        os.execute('rm -r '..continue_txt)
+      os.execute('rm -r '..continue_txt)
    end
 
    os.execute('cd '..current_dir..';'..'ls -d *.t7 | tee '..continue_txt)
    local file_continue = io.open(current_dir..'/'..continue_txt,'r')
+   local file_content = io.open(current_dir..'/'..continue_txt,'r')
    local latest_saved_num = 0
-   for line in file_continue:lines() do
-     local st, _ = string.find(line, '%d_net_G.t7')
-     if st then  -- avoid latest.t7
-        local tmp = tonumber(string.sub(line,1, st))
-        if tmp > latest_saved_num then
-            latest_saved_num = tmp
-        end
-     end
-   end
-   if latest_saved_num == 0 then
-     print('Warning there seems no number saved model, so just train with starting epoch 1')
-   end
-   print('using the number of latest saved model approximate lastest model, it seems no better way...')
-   print('Epoch starting at '..latest_saved_num)
-   start_epoch = latest_saved_num
+   if file_content_all ~= '' then
+      for line in file_continue:lines() do
+          local st, _ = string.find(line, '%d_net_G.t7')
+          if st then  -- avoid latest.t7
+             local tmp = tonumber(string.sub(line,1, st))
+             if tmp > latest_saved_num then
+                latest_saved_num = tmp
+             end
+          end
+      end
+      if latest_saved_num == 0 then
+         print('Warning: it seems that no models with numbers pretrained, so just train with index 1')
+      end
+      print('Using the number of latest saved model approximate lastest model, it seems no better way...')
+      print('Epoch starting at '..latest_saved_num + 1)
+      start_epoch = latest_saved_num
 
-   local load_model_prefix = tostring(latest_saved_num)
-   if opt.precise_model_num == false then
-        load_model_prefix = 'latest'
+      local load_model_prefix = tostring(latest_saved_num)
+      if opt.precise_model_num == false then
+         load_model_prefix = 'latest'
+      end
+      print('loading previously trained netG...')
+      netG = util.load(paths.concat(opt.checkpoints_dir, opt.name, load_model_prefix..'_net_G.t7'), opt)
+      print('loading previously trained netD...')
+      netD = util.load(paths.concat(opt.checkpoints_dir, opt.name, load_model_prefix..'_net_D.t7'), opt)
+   else
+      error('no pretrained model, you\'d better train from scratch')
    end
-   print('loading previously trained netG...')
-   netG = util.load(paths.concat(opt.checkpoints_dir, opt.name, load_model_prefix..'_net_G.t7'), opt)
-   print('loading previously trained netD...')
-   netD = util.load(paths.concat(opt.checkpoints_dir, opt.name, load_model_prefix..'_net_D.t7'), opt) 
+   file_continue:close()
+   file_content:close()
 else
-  print('define model netG...')
-  netG = defineG(input_nc, output_nc, ngf)
-  print('define model netD...')
-  netD = defineD(input_nc, output_nc, ndf)
+   print('define model netG...')
+   netG = defineG(input_nc, output_nc, ngf)
+   print('define model netD...')
+   netD = defineD(input_nc, output_nc, ndf)
 end
 
 print(netG)
@@ -365,7 +372,7 @@ local plot_data = {}
 local plot_win
 
 local counter = 0
-for epoch = start_epoch, opt.niter do
+for epoch = start_epoch+1, opt.niter do
     epoch_tm:reset()
     for i = 1, math.min(data:size(), opt.ntrain), opt.batchSize do
         tm:reset()
