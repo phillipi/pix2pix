@@ -152,6 +152,7 @@ if opt.continue_train == 1 then
    local file_continue = io.open(current_dir..'/'..continue_txt,'r')
    local file_content = io.open(current_dir..'/'..continue_txt,'r')
    local latest_saved_num = 0
+   local file_content_all = file_content:read('*a')
    if file_content_all ~= '' then
       for line in file_continue:lines() do
           local st, _ = string.find(line, '%d_net_G.t7')
