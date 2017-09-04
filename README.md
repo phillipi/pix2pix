@@ -118,7 +118,7 @@ python scripts/combine_A_and_B.py --fold_A /path/to/data/A --fold_B /path/to/dat
 This will combine each pair of images (A,B) into a single image file, ready for training.
 
 ### Notes on Colorization
-No need to run `combine_A_and_B.py` for colorization. Instead, you just need to prepare some natural images, and set `preprocess=colorization` in the script. The program will automatically convert each RGB image into Lab color space, and create  `L -> ab` image pair during the training.
+No need to run `combine_A_and_B.py` for colorization. Instead, you just need to prepare some natural images, and set `preprocess=colorization` in the script. The program will automatically convert each RGB image into Lab color space, and create  `L -> ab` image pair during the training. Also set `input_nc=1` and `output_nc=2`.
 
 ### Extracting Edges
 We provide python and Matlab scripts to extract coarse edges from photos. Run `scripts/edges/batch_hed.py` to compute [HED](https://github.com/s9xie/hed) edges. Run `scripts/edges/PostprocessHED.m` to simplify edges with additional post-processing steps. Check the code documentation for more details.
