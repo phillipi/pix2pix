@@ -163,16 +163,29 @@ if opt.continue_train == 1 then
              end
           end
       end
+      local load_model_prefix = nil
       if latest_saved_num == 0 then
-         print('Warning: it seems that no models with numbers pretrained, so just train with index 1')
+	 load_model_prefix = 'latest'
+         print('Warning: it seems that no models whose names contains numbers pretrained, so just train with index 1')
       end
-      print('Using the number of latest saved model approximate lastest model, it seems no better way...')
+      if load_model_prefix == nil then
+         load_model_prefix = tostring(latest_saved_num)
+      end
       print('Epoch starting at '..latest_saved_num + 1)
       start_epoch = latest_saved_num
 
-      local load_model_prefix = tostring(latest_saved_num)
-      if opt.precise_model_num == false then
-         load_model_prefix = 'latest'
+      local exist_latest = io.open(current_dir..'/'..'latest_net_G.t7')
+      if opt.precise_model_num == true then
+         if latest_saved_num == 0 then
+             error('no models whose names contains numbers pretrained')
+         end
+      else
+         if exist_latest == nil then
+             error('No \'latest\' models saved!')
+         else
+             load_model_prefix = 'latest'
+             exist_latest:close()
+         end
       end
       print('loading previously trained netG...')
       netG = util.load(paths.concat(opt.checkpoints_dir, opt.name, load_model_prefix..'_net_G.t7'), opt)
