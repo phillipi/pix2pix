@@ -85,7 +85,6 @@ local data_loader = paths.dofile('data/data.lua')
 print('#threads...' .. opt.nThreads)
 local data = data_loader.new(opt.nThreads, opt)
 print("Dataset Size: ", data:size())
-tmp_d, tmp_paths = data:getBatch()
 
 ----------------------------------------------------------------------------
 local function weights_init(m)
