@@ -1,6 +1,6 @@
 
 # pix2pix
-[[Project]](https://phillipi.github.io/pix2pix/)   [[Arxiv]](https://arxiv.org/pdf/1611.07004v1.pdf)
+[[Project]](https://phillipi.github.io/pix2pix/)   [[Arxiv]](https://arxiv.org/abs/1611.07004v1)
 [[PyTorch]](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
 
 Torch implementation for learning a mapping from input images to output images, for example:
@@ -9,7 +9,7 @@ Torch implementation for learning a mapping from input images to output images, 
 
 Image-to-Image Translation with Conditional Adversarial Networks  
  [Phillip Isola](http://web.mit.edu/phillipi/), [Jun-Yan Zhu](https://people.eecs.berkeley.edu/~junyanz/), [Tinghui Zhou](https://people.eecs.berkeley.edu/~tinghuiz/), [Alexei A. Efros](https://people.eecs.berkeley.edu/~efros/)   
- In arxiv, 2016.
+ CVPR, 2017.
 
 On some tasks, decent results can be obtained fairly quickly and on small datasets. For example, to learn to generate facades (example shown above), we trained on just 400 images for about 2 hours (on a single Pascal Titan X GPU). However, for harder problems it may be important to train on far larger datasets, and for many hours or even days.
 
@@ -160,8 +160,8 @@ If you use this code for your research, please cite our paper <a href="https://a
 @article{pix2pix2016,
   title={Image-to-Image Translation with Conditional Adversarial Networks},
   author={Isola, Phillip and Zhu, Jun-Yan and Zhou, Tinghui and Efros, Alexei A},
-  journal={arxiv},
-  year={2016}
+  journal={CVPR},
+  year={2017}
 }
 ```
 
