@@ -157,7 +157,7 @@ L1 error is plotted to the display by default. Set the environment variable `dis
 If you use this code for your research, please cite our paper <a href="https://arxiv.org/pdf/1611.07004v1.pdf">Image-to-Image Translation Using Conditional Adversarial Networks</a>:
 
 ```
-@article{pix2pix2016,
+@article{pix2pix2017,
   title={Image-to-Image Translation with Conditional Adversarial Networks},
   author={Isola, Phillip and Zhu, Jun-Yan and Zhou, Tinghui and Efros, Alexei A},
   journal={CVPR},
