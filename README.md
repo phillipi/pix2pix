@@ -138,6 +138,8 @@ python ./scripts/eval_cityscapes/evaluate.py --cityscapes_dir /path/to/original/
 ```
 By default, images in your prediction result directory have the same naming convention as the Cityscapes dataset (e.g. `frankfurt_000001_038418_leftImg8bit.png`). The script will output a txt file under `--output_dir` containing the metric.
 
+**Further notes**: The pre-trained model does not work well on Cityscapes in the original resolution (1024x2048) as it was trained on 256x256 images that are resized to 1024x2048. The purpose of the resizing was to 1) keep the label maps in the original high resolution untouched and 2) avoid the need of changing the standard FCN training code for Cityscapes. To get the *ground-truth* numbers in the paper, you need to resize the original Cityscapes images to 256x256 before running the evaluation code.
+
 ## Display UI
 Optionally, for displaying images during training and test, use the [display package](https://github.com/szym/display).
 
