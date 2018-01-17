@@ -99,7 +99,7 @@ bash ./models/download_model.sh model_name
 - `cityscapes_label2image` (label -> street scene): trained on the Cityscapes dataset.
 - `cityscapes_image2label` (street scene -> label): trained on the Cityscapes dataset.
 - `edges2shoes` (edge -> photo): trained on UT Zappos50K dataset.
-- `edges2handbags` (edge -> photo): train on Amazon handbags images.
+- `edges2handbags` (edge -> photo): trained on Amazon handbags images.
 - `day2night` (daytime scene -> nighttime scene): trained on around 100 [webcams](http://transattr.cs.brown.edu/).
 
 ## Setup Training and Test data
