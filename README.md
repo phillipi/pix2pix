@@ -13,7 +13,7 @@ Image-to-Image Translation with Conditional Adversarial Networks
 
 On some tasks, decent results can be obtained fairly quickly and on small datasets. For example, to learn to generate facades (example shown above), we trained on just 400 images for about 2 hours (on a single Pascal Titan X GPU). However, for harder problems it may be important to train on far larger datasets, and for many hours or even days.
 
-Check out our [[PyTorch]](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) implementation. Also see our latest project [CycleGAN](https://github.com/junyanz/CycleGAN) for learning a pix2pix model **without** input-output pairs.
+**Note**: Please check out our [PyTorch](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) implementation for pix2pix and CycleGAN. The PyTorch version is under active development and can produce results comparable or better than this Torch version.
 
 ## Setup
 
