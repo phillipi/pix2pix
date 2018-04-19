@@ -9,7 +9,7 @@
 # Step 5: run the MATLAB post-processing script "PostprocessHED.m" 
 import numpy as np
 import scipy.misc
-import Image
+from PIL import Image
 import scipy.io
 import os
 import cv2
@@ -61,6 +61,7 @@ for i in range(nImgs):
     in_ = np.array(im, dtype=np.float32)
     in_ = np.pad(in_,((border, border),(border,border),(0,0)),'reflect')
 
+    in_ = in_[:,:,0:3]
     in_ = in_[:,:,::-1]
     in_ -= np.array((104.00698793,116.66876762,122.67891434))
     in_ = in_.transpose((2, 0, 1))
