@@ -89,6 +89,7 @@ bash ./datasets/download_dataset.sh dataset_name
 - `edges2shoes`: 50k training images from [UT Zappos50K dataset](http://vision.cs.utexas.edu/projects/finegrained/utzap50k/). Edges are computed by [HED](https://github.com/s9xie/hed) edge detector + post-processing.
 [[Citation](datasets/bibtex/shoes.tex)]
 - `edges2handbags`: 137K Amazon Handbag images from [iGAN project](https://github.com/junyanz/iGAN). Edges are computed by [HED](https://github.com/s9xie/hed) edge detector + post-processing. [[Citation](datasets/bibtex/handbags.tex)]
+- `day2night` and `night2day`: around 20K natural scene images from  [Transient Attributes dataset](http://transattr.cs.brown.edu/) [[Citation](datasets/bibtex/transattr.tex)]
 
 ## Models
 Download the pre-trained models with the following script. You need to rename the model (e.g. `facades_label2image` to `/checkpoints/facades/latest_net_G.t7`) after the download has finished.
