@@ -33,7 +33,7 @@ luarocks install https://raw.githubusercontent.com/szym/display/master/display-s
 git clone git@github.com:phillipi/pix2pix.git
 cd pix2pix
 ```
-- Download the dataset (e.g. [CMP Facades](http://cmp.felk.cvut.cz/~tylecr1/facade/)):
+- Download the dataset (e.g., [CMP Facades](http://cmp.felk.cvut.cz/~tylecr1/facade/)):
 ```bash
 bash ./datasets/download_dataset.sh facades
 ```
@@ -92,7 +92,7 @@ bash ./datasets/download_dataset.sh dataset_name
 - `night2day`: around 20K natural scene images from  [Transient Attributes dataset](http://transattr.cs.brown.edu/) [[Citation](datasets/bibtex/transattr.tex)]. To train a `day2night` pix2pix model, you need to add `which_direction=BtoA`.
 
 ## Models
-Download the pre-trained models with the following script. You need to rename the model (e.g. `facades_label2image` to `/checkpoints/facades/latest_net_G.t7`) after the download has finished.
+Download the pre-trained models with the following script. You need to rename the model (e.g., `facades_label2image` to `/checkpoints/facades/latest_net_G.t7`) after the download has finished.
 ```bash
 bash ./models/download_model.sh model_name
 ```
@@ -109,7 +109,7 @@ We provide a python script to generate training data in the form of pairs of ima
 
 Create folder `/path/to/data` with subfolders `A` and `B`. `A` and `B` should each have their own subfolders `train`, `val`, `test`, etc. In `/path/to/data/A/train`, put training images in style A. In `/path/to/data/B/train`, put the corresponding images in style B. Repeat same for other data splits (`val`, `test`, etc).
 
-Corresponding images in a pair {A,B} must be the same size and have the same filename, e.g. `/path/to/data/A/train/1.jpg` is considered to correspond to `/path/to/data/B/train/1.jpg`.
+Corresponding images in a pair {A,B} must be the same size and have the same filename, e.g., `/path/to/data/A/train/1.jpg` is considered to correspond to `/path/to/data/B/train/1.jpg`.
 
 Once the data is formatted this way, call:
 ```bash
@@ -137,7 +137,7 @@ Now you can run the following command to evaluate your predictions:
 ```bash
 python ./scripts/eval_cityscapes/evaluate.py --cityscapes_dir /path/to/original/cityscapes/dataset/ --result_dir /path/to/your/predictions/ --output_dir /path/to/output/directory/
 ```
-By default, images in your prediction result directory have the same naming convention as the Cityscapes dataset (e.g. `frankfurt_000001_038418_leftImg8bit.png`). The script will output a text file under `--output_dir` containing the metric.
+By default, images in your prediction result directory have the same naming convention as the Cityscapes dataset (e.g., `frankfurt_000001_038418_leftImg8bit.png`). The script will output a text file under `--output_dir` containing the metric.
 
 **Further notes**: The pre-trained model does not work well on Cityscapes in the original resolution (1024x2048) as it was trained on 256x256 images that are resized to 1024x2048. The purpose of the resizing was to 1) keep the label maps in the original high resolution untouched and 2) avoid the need of changing the standard FCN training code for Cityscapes. To get the *ground-truth* numbers in the paper, you need to resize the original Cityscapes images to 256x256 before running the evaluation code.
 
