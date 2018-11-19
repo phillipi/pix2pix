@@ -13,7 +13,7 @@ Image-to-Image Translation with Conditional Adversarial Networks
 
 On some tasks, decent results can be obtained fairly quickly and on small datasets. For example, to learn to generate facades (example shown above), we trained on just 400 images for about 2 hours (on a single Pascal Titan X GPU). However, for harder problems it may be important to train on far larger datasets, and for many hours or even days.
 
-**Note**: Please check out our [PyTorch](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) implementation for pix2pix and CycleGAN. The PyTorch version is under active development and can produce results comparable or better than this Torch version.
+**Note**: Please check out our [PyTorch](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix) implementation for pix2pix and CycleGAN. The PyTorch version is under active development and can produce results comparable to or better than this Torch version.
 
 ## Setup
 
@@ -105,7 +105,7 @@ bash ./models/download_model.sh model_name
 
 ## Setup Training and Test data
 ### Generating Pairs
-We provide a python script to generate training data in the form of pairs of images {A,B}, where A and B are two different depicitions of the same underlying scene. For example, these might be pairs {label map, photo} or {bw image, color image}. Then we can learn to translate A to B or B to A:
+We provide a python script to generate training data in the form of pairs of images {A,B}, where A and B are two different depictions of the same underlying scene. For example, these might be pairs {label map, photo} or {bw image, color image}. Then we can learn to translate A to B or B to A:
 
 Create folder `/path/to/data` with subfolders `A` and `B`. `A` and `B` should each have their own subfolders `train`, `val`, `test`, etc. In `/path/to/data/A/train`, put training images in style A. In `/path/to/data/B/train`, put the corresponding images in style B. Repeat same for other data splits (`val`, `test`, etc).
 
@@ -119,7 +119,7 @@ python scripts/combine_A_and_B.py --fold_A /path/to/data/A --fold_B /path/to/dat
 This will combine each pair of images (A,B) into a single image file, ready for training.
 
 ### Notes on Colorization
-No need to run `combine_A_and_B.py` for colorization. Instead, you just need to prepare some natural images, and set `preprocess=colorization` in the script. The program will automatically convert each RGB image into Lab color space, and create  `L -> ab` image pair during the training. Also set `input_nc=1` and `output_nc=2`.
+No need to run `combine_A_and_B.py` for colorization. Instead, you need to prepare some natural images and set `preprocess=colorization` in the script. The program will automatically convert each RGB image into Lab color space, and create  `L -> ab` image pair during the training. Also set `input_nc=1` and `output_nc=2`.
 
 ### Extracting Edges
 We provide python and Matlab scripts to extract coarse edges from photos. Run `scripts/edges/batch_hed.py` to compute [HED](https://github.com/s9xie/hed) edges. Run `scripts/edges/PostprocessHED.m` to simplify edges with additional post-processing steps. Check the code documentation for more details.
@@ -137,7 +137,7 @@ Now you can run the following command to evaluate your predictions:
 ```bash
 python ./scripts/eval_cityscapes/evaluate.py --cityscapes_dir /path/to/original/cityscapes/dataset/ --result_dir /path/to/your/predictions/ --output_dir /path/to/output/directory/
 ```
-By default, images in your prediction result directory have the same naming convention as the Cityscapes dataset (e.g. `frankfurt_000001_038418_leftImg8bit.png`). The script will output a txt file under `--output_dir` containing the metric.
+By default, images in your prediction result directory have the same naming convention as the Cityscapes dataset (e.g. `frankfurt_000001_038418_leftImg8bit.png`). The script will output a text file under `--output_dir` containing the metric.
 
 **Further notes**: The pre-trained model does not work well on Cityscapes in the original resolution (1024x2048) as it was trained on 256x256 images that are resized to 1024x2048. The purpose of the resizing was to 1) keep the label maps in the original high resolution untouched and 2) avoid the need of changing the standard FCN training code for Cityscapes. To get the *ground-truth* numbers in the paper, you need to resize the original Cityscapes images to 256x256 before running the evaluation code.
 
@@ -154,7 +154,7 @@ th -ldisplay.start 8000 0.0.0.0
 ```
 Then open `http://(hostname):(port)/` in your browser to load the remote desktop.
 
-L1 error is plotted to the display by default. Set the environment variable `display_plot` to a comma-seperated list of values `errL1`, `errG` and `errD` to visualize the L1, generator, and descriminator error respectively. For example, to plot only the generator and descriminator errors to the display instead of the default L1 error, set `display_plot="errG,errD"`.
+L1 error is plotted to the display by default. Set the environment variable `display_plot` to a comma-separated list of values `errL1`, `errG` and `errD` to visualize the L1, generator, and discriminator error respectively. For example, to plot only the generator and discriminator errors to the display instead of the default L1 error, set `display_plot="errG,errD"`.
 
 ## Citation
 If you use this code for your research, please cite our paper <a href="https://arxiv.org/pdf/1611.07004v1.pdf">Image-to-Image Translation Using Conditional Adversarial Networks</a>:
