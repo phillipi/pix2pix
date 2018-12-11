@@ -1,7 +1,7 @@
 
 # pix2pix
-[[Project]](https://phillipi.github.io/pix2pix/)   [[Arxiv]](https://arxiv.org/abs/1611.07004)
-[[PyTorch]](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
+[Project](https://phillipi.github.io/pix2pix/) | [Arxiv](https://arxiv.org/abs/1611.07004) | 
+[PyTorch](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
 
 Torch implementation for learning a mapping from input images to output images, for example:
 
