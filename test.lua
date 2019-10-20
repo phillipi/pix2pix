@@ -94,26 +94,26 @@ opt.how_many=math.min(opt.how_many, data:size())
 local filepaths = {} -- paths to images tested on
 for n=1,math.floor(opt.how_many/opt.batchSize) do
     print('processing batch ' .. n)
-    
+
     local data_curr, filepaths_curr = data:getBatch()
     filepaths_curr = util.basename_batch(filepaths_curr)
     print('filepaths_curr: ', filepaths_curr)
-    
+
     input = data_curr[{ {}, idx_A, {}, {} }]
     target = data_curr[{ {}, idx_B, {}, {} }]
-    
+
     if opt.gpu > 0 then
         input = input:cuda()
     end
-    
+
     if opt.preprocess == 'colorization' then
        local output_AB = netG:forward(input):float()
-       local input_L = input:float() 
+       local input_L = input:float()
        output = util.deprocessLAB_batch(input_L, output_AB)
        local target_AB = target:float()
        target = util.deprocessLAB_batch(input_L, target_AB)
        input = util.deprocessL_batch(input_L)
-    else 
+    else
         output = util.deprocess_batch(netG:forward(input))
         input = util.deprocess_batch(input):float()
         output = output:float()
@@ -125,27 +125,24 @@ for n=1,math.floor(opt.how_many/opt.batchSize) do
     paths.mkdir(paths.concat(image_dir,'input'))
     paths.mkdir(paths.concat(image_dir,'output'))
     paths.mkdir(paths.concat(image_dir,'target'))
-    -- print(input:size())
-    -- print(output:size())
-    -- print(target:size())
     for i=1, opt.batchSize do
         image.save(paths.concat(image_dir,'input',filepaths_curr[i]), image.scale(input[i],input[i]:size(2),input[i]:size(3)/opt.aspect_ratio))
         image.save(paths.concat(image_dir,'output',filepaths_curr[i]), image.scale(output[i],output[i]:size(2),output[i]:size(3)/opt.aspect_ratio))
         image.save(paths.concat(image_dir,'target',filepaths_curr[i]), image.scale(target[i],target[i]:size(2),target[i]:size(3)/opt.aspect_ratio))
     end
     print('Saved images to: ', image_dir)
-    
+
     if opt.display then
       if opt.preprocess == 'regular' then
         disp = require 'display'
         disp.image(util.scaleBatch(input,100,100),{win=opt.display_id, title='input'})
         disp.image(util.scaleBatch(output,100,100),{win=opt.display_id+1, title='output'})
         disp.image(util.scaleBatch(target,100,100),{win=opt.display_id+2, title='target'})
-        
+
         print('Displayed images')
       end
     end
-    
+
     filepaths = TableConcat(filepaths, filepaths_curr)
 end
 

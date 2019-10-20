@@ -49,30 +49,30 @@ local preprocessAandB = function(imA, imB)
   assert(imA:min()>=-1,"A: badly scaled inputs")
   assert(imB:max()<=1,"B: badly scaled inputs")
   assert(imB:min()>=-1,"B: badly scaled inputs")
- 
-  
+
+
   local oW = sampleSize[2]
   local oH = sampleSize[2]
   local iH = imA:size(2)
   local iW = imA:size(3)
-  
-  if iH~=oH then     
+
+  if iH~=oH then
     h1 = math.ceil(torch.uniform(1e-2, iH-oH))
   end
-  
+
   if iW~=oW then
     w1 = math.ceil(torch.uniform(1e-2, iW-oW))
   end
-  if iH ~= oH or iW ~= oW then 
+  if iH ~= oH or iW ~= oW then
     imA = image.crop(imA, w1, h1, w1 + oW, h1 + oH)
     imB = image.crop(imB, w1, h1, w1 + oW, h1 + oH)
   end
-  
-  if opt.flip == 1 and torch.uniform() > 0.5 then 
+
+  if opt.flip == 1 and torch.uniform() > 0.5 then
     imA = image.hflip(imA)
     imB = image.hflip(imB)
   end
-  
+
   return imA, imB
 end
 
@@ -86,33 +86,30 @@ local function loadImageChannel(path)
     local oH = sampleSize[2]
     local iH = input:size(2)
     local iW = input:size(3)
-    
-    if iH~=oH then     
+
+    if iH~=oH then
       h1 = math.ceil(torch.uniform(1e-2, iH-oH))
     end
-    
+
     if iW~=oW then
       w1 = math.ceil(torch.uniform(1e-2, iW-oW))
     end
-    if iH ~= oH or iW ~= oW then 
+    if iH ~= oH or iW ~= oW then
       input = image.crop(input, w1, h1, w1 + oW, h1 + oH)
     end
-    
-    
-    if opt.flip == 1 and torch.uniform() > 0.5 then 
+
+
+    if opt.flip == 1 and torch.uniform() > 0.5 then
       input = image.hflip(input)
     end
-    
---    print(input:mean(), input:min(), input:max())
+
     local input_lab = image.rgb2lab(input)
---    print(input_lab:size())
---    os.exit()
     local imA = input_lab[{{1}, {}, {} }]:div(50.0) - 1.0
     local imB = input_lab[{{2,3},{},{}}]:div(110.0)
     local imAB = torch.cat(imA, imB, 1)
     assert(imAB:max()<=1,"A: badly scaled inputs")
     assert(imAB:min()>=-1,"A: badly scaled inputs")
-    
+
     return imAB
 end
 
@@ -125,7 +122,7 @@ local function loadImage(path)
 
    local imA = image.crop(input, 0, 0, w/2, h)
    local imB = image.crop(input, w/2, 0, w, h)
-   
+
    return imA, imB
 end
 
@@ -141,19 +138,19 @@ local function loadImageInpaint(path)
   local oH = sampleSize[2]
   local iH = imB:size(2)
   local iW = imB:size(3)
-  if iH~=oH then     
+  if iH~=oH then
     h1 = math.ceil(torch.uniform(1e-2, iH-oH))
   end
-  
+
   if iW~=oW then
     w1 = math.ceil(torch.uniform(1e-2, iW-oW))
   end
-  if iH ~= oH or iW ~= oW then 
+  if iH ~= oH or iW ~= oW then
     imB = image.crop(imB, w1, h1, w1 + oW, h1 + oH)
   end
   local imA = imB:clone()
   imA[{{},{1 + oH/4, oH/2 + oH/4},{1 + oW/4, oW/2 + oW/4}}] = 1.0
-  if opt.flip == 1 and torch.uniform() > 0.5 then 
+  if opt.flip == 1 and torch.uniform() > 0.5 then
     imA = image.hflip(imA)
     imB = image.hflip(imB)
   end
@@ -170,54 +167,36 @@ local mean,std
 local trainHook = function(self, path)
    collectgarbage()
    if opt.preprocess == 'regular' then
---     print('process regular')
      local imA, imB = loadImage(path)
      imA, imB = preprocessAandB(imA, imB)
      imAB = torch.cat(imA, imB, 1)
    end
-   
-   if opt.preprocess == 'colorization' then 
---     print('process colorization')
+
+   if opt.preprocess == 'colorization' then
      imAB = loadImageChannel(path)
    end
 
    if opt.preprocess == 'inpaint' then
-    -- print('process inpaint')
-     imAB = loadImageInpaint(path)  
+     imAB = loadImageInpaint(path)
    end
-  -- print('image AB size')
-  -- print(imAB:size())
    return imAB
 end
 
 --------------------------------------
 -- trainLoader
 print('trainCache', trainCache)
---if paths.filep(trainCache) then
---   print('Loading train metadata from cache')
---   trainLoader = torch.load(trainCache)
---   trainLoader.sampleHookTrain = trainHook
---   trainLoader.loadSize = {input_nc, opt.loadSize, opt.loadSize}
---   trainLoader.sampleSize = {input_nc+output_nc, sampleSize[2], sampleSize[2]}
---   trainLoader.serial_batches = opt.serial_batches
---   trainLoader.split = 100
---else
 print('Creating train metadata')
---   print(opt.data)
 print('serial batch:, ', opt.serial_batches)
 trainLoader = dataLoader{
     paths = {opt.data},
     loadSize = {input_nc, loadSize[2], loadSize[2]},
     sampleSize = {input_nc+output_nc, sampleSize[2], sampleSize[2]},
     split = 100,
-    serial_batches = opt.serial_batches, 
+    serial_batches = opt.serial_batches,
     verbose = true
  }
---   print('finish')
---torch.save(trainCache, trainLoader)
---print('saved metadata cache at', trainCache)
+
 trainLoader.sampleHookTrain = trainHook
---end
 collectgarbage()
 
 -- do some sanity checks on trainLoader

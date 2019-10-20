@@ -52,7 +52,7 @@ local initcheck = argcheck{
    {name="serial_batches",
     type="number",
     help="if randomly sample training images"},
-     
+
    {name="samplingMode",
     type="string",
     help="Sampling mode: random | balanced ",
@@ -101,7 +101,6 @@ function dataset:__init(...)
    if not self.sampleHookTrain then self.sampleHookTrain = self.defaultSampleHook end
    if not self.sampleHookTest then self.sampleHookTest = self.defaultSampleHook end
    self.image_count = 1
---   print('image_count_init', self.image_count)
    -- find class names
    self.classes = {}
    local classPaths = {}
@@ -116,15 +115,11 @@ function dataset:__init(...)
    -- also store the directory paths per class
    -- for each class,
    for k,path in ipairs(self.paths) do
---      print('path', path)
       local dirs = {} -- hack
       dirs[1] = path
---      local dirs = dir.getdirectories(path);
       for k,dirpath in ipairs(dirs) do
          local class = paths.basename(dirpath)
          local idx = tableFind(self.classes, class)
---         print(class)
---         print(idx)
          if not idx then
             table.insert(self.classes, class)
             idx = #self.classes
@@ -325,16 +320,12 @@ end
 -- getByClass
 function dataset:getByClass(class)
    local index = 0
-   if self.serial_batches == 1 then 
+   if self.serial_batches == 1 then
      index = math.fmod(self.image_count-1, self.classListSample[class]:nElement())+1
      self.image_count = self.image_count +1
    else
     index = math.ceil(torch.uniform() * self.classListSample[class]:nElement())
    end
---   print('serial_batches: ', self.serial_batches)
---   print('max_index:, ', self.classListSample[class]:nElement())
---   print('index: ', index)
---   print('image_count', 
    local imgpath = ffi.string(torch.data(self.imagePath[self.classListSample[class][index]]))
    return self:sampleHookTrain(imgpath),  imgpath
 end
@@ -343,15 +334,9 @@ end
 local function tableToOutput(self, dataTable, scalarTable)
    local data, scalarLabels, labels
    local quantity = #scalarTable
---   print(dataTable[1]:())
    assert(dataTable[1]:dim() == 3)
---   print(quantity)
---   print(self.sampleSize[1])
---   print(self.sampleSize[2])
---   print(self.sampleSize[3])
    data = torch.Tensor(quantity,
 		       self.sampleSize[1], self.sampleSize[2], self.sampleSize[3])
---	 print(data:size())
    scalarLabels = torch.LongTensor(quantity):fill(-1111)
    for i=1,#dataTable do
       data[i]:copy(dataTable[i])
@@ -368,18 +353,11 @@ function dataset:sample(quantity)
    local samplePaths = {}
    for i=1,quantity do
       local class = torch.random(1, #self.classes)
---      print(class)
       local out, imgpath = self:getByClass(class)
       table.insert(dataTable, out)
       table.insert(scalarTable, class)
       samplePaths[i] = imgpath
---      print(imgpath)
---      table.insert(pathTable, imgpath)
---      table.insert()
---      print('out', out:size())
    end
---   print('table')
---   print(table)
    local data, scalarLabels = tableToOutput(self, dataTable, scalarTable)
    return data, scalarLabels, samplePaths-- filePaths
 end
