@@ -1,6 +1,6 @@
 
 # pix2pix
-[Project](https://phillipi.github.io/pix2pix/) | [Arxiv](https://arxiv.org/abs/1611.07004) | 
+[Project](https://phillipi.github.io/pix2pix/) | [Arxiv](https://arxiv.org/abs/1611.07004) |
 [PyTorch](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
 
 Torch implementation for learning a mapping from input images to output images, for example:
@@ -139,7 +139,8 @@ python ./scripts/eval_cityscapes/evaluate.py --cityscapes_dir /path/to/original/
 ```
 Images stored under `--result_dir` should contain your model predictions on the Cityscapes **validation** split, and have the original Cityscapes naming convention (e.g., `frankfurt_000001_038418_leftImg8bit.png`). The script will output a text file under `--output_dir` containing the metric.
 
-**Further notes**: The pre-trained model is **not** supposed to work on Cityscapes in the original resolution (1024x2048) as it was trained on 256x256 images that are upsampled to 1024x2048. The purpose of the resizing was to 1) keep the label maps in the original high resolution untouched and 2) avoid the need of changing the standard FCN training code for Cityscapes. To get the *ground-truth* numbers in the paper, you need to resize the original Cityscapes images to 256x256 before running the evaluation code.
+**Further notes**: Our pre-trained FCN model is **not** supposed to work on Cityscapes in the original resolution (1024x2048) as it was trained on 256x256 images that are then upsampled to 1024x2048 during training. The purpose of the resizing during training was to 1) keep the label maps in the original high resolution untouched and 2) avoid the need to change the standard FCN training code and the architecture for Cityscapes. During test time, you need to synthesize 256x256 results. Our test code will automatically upsample your results to 1024x2048 before feeding them to the pre-trained FCN model. The output is at 1024x2048 resolution and will be compared to 1024x2048 ground truth labels. You do not need to resize the ground truth labels. The best way to verify whether everything is correct is to reproduce the numbers for real images in the paper first. To achieve it, you need to resize the original/real Cityscapes images (**not** labels) to 256x256 and feed them to the evaluation code.
+
 
 ## Display UI
 Optionally, for displaying images during training and test, use the [display package](https://github.com/szym/display).
