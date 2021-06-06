@@ -27,7 +27,7 @@ opt = {
    flip = 1,               -- if flip the images for data argumentation
    display = 1,            -- display samples while training. 0 = false
    display_id = 10,        -- display window id.
-   display_plot = 'errL1',    -- which loss values to plot over time. Accepted values include a comma seperated list of: errL1, errG, and errD
+   display_plot = 'errL1',    -- which loss values to plot over time. Accepted values include a comma separated list of: errL1, errG, and errD
    gpu = 1,                -- gpu = 0 is CPU mode. gpu=X is GPU mode on GPU X
    name = '',              -- name of the experiment, should generally be passed on the command line
    which_direction = 'AtoB',    -- AtoB or BtoA
@@ -53,7 +53,7 @@ opt = {
    lambda = 100,               -- weight on L1 term in objective
 }
 
--- one-line argument parser. parses enviroment variables to override the defaults
+-- one-line argument parser. parses environment variables to override the defaults
 for k,v in pairs(opt) do opt[k] = tonumber(os.getenv(k)) or os.getenv(k) or opt[k] end
 print(opt)
 
